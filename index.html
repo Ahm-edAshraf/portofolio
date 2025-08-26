@@ -210,10 +210,13 @@
     <!-- Stats -->
     <section id="stats" class="section">
       <div class="container">
-        <h2 class="section-title">GitHub Stats</h2>
+        <div class="flex items-center justify-between gap-4">
+          <h2 class="section-title">GitHub Stats</h2>
+          <button id="refresh-stats" class="chip" title="Force refresh stats">↻ Refresh</button>
+        </div>
         <div class="mt-8 flex flex-wrap items-center justify-center gap-6">
-          <img src="https://github-readme-stats.vercel.app/api?username=Ahm-edAshraf&show_icons=true&theme=radical" alt="GitHub stats" class="h-[180px] rounded-xl border border-white/10 bg-white/60 p-2 shadow dark:bg-white/5" />
-          <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Ahm-edAshraf&layout=compact&theme=radical" alt="Top languages" class="h-[180px] rounded-xl border border-white/10 bg-white/60 p-2 shadow dark:bg-white/5" />
+          <img data-src="https://github-readme-stats.vercel.app/api?username=Ahm-edAshraf&show_icons=true&theme=radical&cache_seconds=3600" alt="GitHub stats" class="gh-stat h-[180px] rounded-xl border border-white/10 bg-white/60 p-2 shadow dark:bg-white/5" loading="lazy" decoding="async" />
+          <img data-src="https://github-readme-stats.vercel.app/api/top-langs/?username=Ahm-edAshraf&layout=compact&theme=radical&cache_seconds=3600" alt="Top languages" class="gh-stat h-[180px] rounded-xl border border-white/10 bg-white/60 p-2 shadow dark:bg-white/5" loading="lazy" decoding="async" />
         </div>
       </div>
     </section>

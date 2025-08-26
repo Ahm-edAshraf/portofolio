@@ -107,6 +107,27 @@ window.addEventListener('DOMContentLoaded', () => {
     update(); setInterval(update, 30_000);
   }
 
+  // Live-ish refresh for GitHub stat images (cache-busting)
+  function stamped(url, bucketMs = 10 * 60 * 1000) { // 10 min buckets
+    try {
+      const u = new URL(url, location.href);
+      u.searchParams.set('ts', Math.floor(Date.now() / bucketMs));
+      return u.toString();
+    } catch { return url; }
+  }
+  function refreshStats(force = false) {
+    document.querySelectorAll('img.gh-stat').forEach((img) => {
+      const base = img.getAttribute('data-src') || img.src;
+      let next = stamped(base);
+      if (force) next += `&r=${Math.random().toString(36).slice(2)}`;
+      img.src = next;
+    });
+  }
+  refreshStats(false);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshStats(false); });
+  window.addEventListener('focus', () => refreshStats(false));
+  document.getElementById('refresh-stats')?.addEventListener('click', () => refreshStats(true));
+
   // Animated gradient mesh (lightweight blobs)
   if (mesh && mesh.getContext) {
     const ctx = mesh.getContext('2d');
