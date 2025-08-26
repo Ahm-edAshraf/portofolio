@@ -13,6 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const progress = document.getElementById('progress');
   const glow = document.getElementById('cursor-glow');
   const mesh = document.getElementById('mesh');
+  const particles = document.getElementById('particles');
 
   // Theme toggle
   themeToggle?.addEventListener('click', () => {
@@ -40,7 +41,8 @@ window.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('mousemove', queueGlow, { passive: true });
   (function glowRAF(){
     if (needGlowUpdate) {
-      glow.style.transform = `translate3d(${gx}px, ${gy}px, 0)`;
+      glow.style.left = `${Math.round(gx)}px`;
+      glow.style.top = `${Math.round(gy)}px`;
       needGlowUpdate = false;
     }
     requestAnimationFrame(glowRAF);
@@ -146,6 +148,22 @@ window.addEventListener('DOMContentLoaded', () => {
     tick();
   }
 
+  // Parallax elements
+  const parallaxEls = document.querySelectorAll('[data-parallax]');
+  if (parallaxEls.length) {
+    const onParallax = (e) => {
+      const cx = (e.clientX / innerWidth) - 0.5;
+      const cy = (e.clientY / innerHeight) - 0.5;
+      parallaxEls.forEach((el, i) => {
+        const depth = 6 + i * 2;
+        el.style.transform = `translate3d(${cx * depth}px, ${cy * depth}px, 0)`;
+      });
+    };
+    window.addEventListener('pointermove', onParallax, { passive: true });
+  }
+
+  // Contact form: UI-only (no submission)
+
   // Modular projects rendering
   const projects = [
     {
@@ -153,34 +171,47 @@ window.addEventListener('DOMContentLoaded', () => {
       href: 'https://github.com/Ahm-edAshraf/ai-code-reviewer',
       desc: 'Uses Gemini API to review PRs, suggest improvements, and comment automatically via GitHub webhooks.',
       tech: 'Python • Flask • Webhooks',
-      image: null
+      image: 'assets/codereviewer.jpeg',
+      tags: ['ai','python','web']
     },
     {
       title: 'FormAI',
       href: 'https://github.com/Ahm-edAshraf/FormAi',
       desc: 'AI‑powered form builder to generate, customize, and validate forms with natural language prompts.',
       tech: 'Next.js • Supabase • Tailwind',
-      image: null
+      image: 'assets/formai.jpeg',
+      tags: ['nextjs','supabase','web','ai']
     },
     {
       title: 'APU Student Help',
       href: 'https://github.com/Ahm-edAshraf/apu-student-help',
       desc: 'Peer‑assist platform for university students to exchange help and resources.',
       tech: 'Node.js • Express • Web',
-      image: null
+      image: 'assets/studenthelp.jpeg',
+      tags: ['node','express','web']
     }
   ];
 
   const grid = document.getElementById('projects-grid');
-  if (grid) {
-    grid.innerHTML = projects.map((p) => {
+  const filtersEl = document.getElementById('project-filters');
+  let activeTags = new Set();
+  function renderFilters() {
+    if (!filtersEl) return;
+    const all = Array.from(new Set(projects.flatMap(p => p.tags || [])));
+    filtersEl.innerHTML = all.map(tag => `<button class="chip" data-tag="${tag}" data-active="${activeTags.has(tag)}">#${tag}</button>`).join('');
+  }
+  function renderProjects() {
+    if (!grid) return;
+    const list = projects.filter(p => activeTags.size === 0 || (p.tags || []).some(t => activeTags.has(t)));
+    grid.innerHTML = list.map((p, idx) => {
       const placeholder = 'assets/placeholder.svg';
       const imgSrc = p.image || placeholder;
+      const originalIndex = projects.indexOf(p);
       return `
-        <a href="${p.href}" target="_blank" rel="noopener" class="project-card group" data-ripple>
+        <a href="${p.href}" target="_blank" rel="noopener" class="project-card group" data-ripple data-index="${originalIndex}">
           <div class="project-card-inner">
-            <figure class="project-media">
-              <img src="${imgSrc}" alt="${p.title} preview" loading="lazy"/>
+            <figure class="project-media" data-lightbox="${originalIndex}">
+              <img src="${imgSrc}" alt="${p.title} preview" loading="lazy" decoding="async" sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"/>
             </figure>
             <div class="project-badge mt-3">${p.tech}</div>
             <h3 class="project-title">${p.title}</h3>
@@ -192,6 +223,59 @@ window.addEventListener('DOMContentLoaded', () => {
     }).join('');
     grid.querySelectorAll('.project-card').forEach((card) => attachTilt(card));
   }
+  renderFilters();
+  renderProjects();
+  filtersEl?.addEventListener('click', (e) => {
+    const btn = e.target.closest('.chip');
+    if (!btn) return;
+    const tag = btn.getAttribute('data-tag');
+    if (activeTags.has(tag)) activeTags.delete(tag); else activeTags.add(tag);
+    renderFilters();
+    renderProjects();
+  });
+
+  // Lightbox
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  const lbCap = document.getElementById('lightbox-caption');
+  const lbPrev = document.getElementById('lightbox-prev');
+  const lbNext = document.getElementById('lightbox-next');
+  const lbClose = document.getElementById('lightbox-close');
+  function openLightbox(index) {
+    const p = projects[index];
+    if (!p) return;
+    lbImg.src = p.image || 'assets/placeholder.svg';
+    lbCap.textContent = `${p.title} — ${p.tech}`;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    lb.dataset.index = index;
+  }
+  function closeLightbox() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function navLightbox(dir) {
+    const cur = Number(lb.dataset.index || 0);
+    const next = (cur + dir + projects.length) % projects.length;
+    openLightbox(next);
+  }
+  grid?.addEventListener('click', (e) => {
+    const fig = e.target.closest('[data-lightbox]');
+    if (!fig) return;
+    e.preventDefault();
+    const idx = Number(fig.getAttribute('data-lightbox'));
+    openLightbox(idx);
+  });
+  lbClose?.addEventListener('click', closeLightbox);
+  lbPrev?.addEventListener('click', () => navLightbox(-1));
+  lbNext?.addEventListener('click', () => navLightbox(1));
+  lb?.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
+  window.addEventListener('keydown', (e) => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navLightbox(-1);
+    if (e.key === 'ArrowRight') navLightbox(1);
+  });
 
   // Magnetic buttons
   document.querySelectorAll('[data-magnetic]').forEach((el) => {
@@ -222,4 +306,53 @@ window.addEventListener('DOMContentLoaded', () => {
     el.appendChild(ripple);
     setTimeout(() => ripple.remove(), 650);
   }, { passive: true });
+
+  // Particle cursor + confetti
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (particles && particles.getContext && !prefersReduced) {
+    const ctx = particles.getContext('2d');
+    const DPR = Math.min(2, window.devicePixelRatio || 1);
+    let w, h; const P = [];
+    function resizeP() { w = particles.clientWidth; h = particles.clientHeight; particles.width = w * DPR; particles.height = h * DPR; ctx.setTransform(DPR,0,0,DPR,0,0);} resizeP();
+    window.addEventListener('resize', resizeP);
+    function spawn(x,y, opts={}){ const n=opts.n||6; for(let i=0;i<n;i++){ const a=Math.random()*Math.PI*2; const v=(opts.v||1)+Math.random()*1.5; P.push({x,y, vx:Math.cos(a)*v, vy:Math.sin(a)*v - (opts.up||0), life:opts.life||40, r:Math.random()*2+1, c: opts.color||`hsla(${Math.random()*360},90%,60%,1)`}); } }
+    let lastX=innerWidth/2,lastY=innerHeight/2; let frame=0;
+    window.addEventListener('pointermove', (e)=>{ lastX=e.clientX; lastY=e.clientY; if(frame%2===0) spawn(lastX,lastY,{n:3, v:0.8, up:0.4, life:28, color:'hsla(200,90%,70%,1)'}); }, {passive:true});
+    function tickP(){ frame++; ctx.clearRect(0,0,w,h); P.forEach((p,i)=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=0.03; p.life--; ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); });
+      for(let i=P.length-1;i>=0;i--){ if(P[i].life<=0) P.splice(i,1); }
+      requestAnimationFrame(tickP);
+    } tickP();
+    window.confettiBurst = (x,y)=> spawn(x,y,{n:24, v:2.6, up:1.2, life:48});
+  }
+
+  // Confetti when copying contact info
+  document.querySelectorAll('.copy-btn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      if (window.confettiBurst) window.confettiBurst(e.clientX, e.clientY);
+    });
+  });
+
+  // Command palette
+  const cmd = document.getElementById('cmd');
+  const cmdInput = document.getElementById('cmd-input');
+  const cmdResults = document.getElementById('cmd-results');
+  const commands = [
+    { label: 'Go to About', action: () => document.getElementById('about').scrollIntoView({behavior:'smooth'}) },
+    { label: 'Go to Projects', action: () => document.getElementById('projects').scrollIntoView({behavior:'smooth'}) },
+    { label: 'Go to Stack', action: () => document.getElementById('stack').scrollIntoView({behavior:'smooth'}) },
+    { label: 'Go to Stats', action: () => document.getElementById('stats').scrollIntoView({behavior:'smooth'}) },
+    { label: 'Go to Contact', action: () => document.getElementById('contact').scrollIntoView({behavior:'smooth'}) },
+    { label: 'Open GitHub Profile', action: () => window.open('https://github.com/Ahm-edAshraf','_blank') },
+    ...projects.map((p) => ({ label: `Open: ${p.title}`, action: () => window.open(p.href,'_blank') }))
+  ];
+  function openCmd(){ cmd.classList.add('open'); cmd.classList.remove('hidden'); cmdInput.value=''; renderCmd(''); cmdInput.focus(); document.body.style.overflow='hidden'; }
+  function closeCmd(){ cmd.classList.remove('open'); cmd.classList.add('hidden'); document.body.style.overflow=''; }
+  function renderCmd(q){ const r = fuzzyFilter(commands, q); cmdResults.innerHTML = r.map((c,i)=>`<div class="cmd-item" data-i="${c.index}" ${i===0?'aria-selected="true"':''}>${highlight(c.label,q)}</div>`).join(''); }
+  function highlight(text,q){ if(!q) return text; const i=text.toLowerCase().indexOf(q.toLowerCase()); if(i<0) return text; return text.slice(0,i)+`<mark class="bg-transparent text-sky-400">`+text.slice(i,i+q.length)+`</mark>`+text.slice(i+q.length); }
+  function fuzzyFilter(items, q){ if(!q) return items.map((it,idx)=>({label:it.label, action:it.action, index:idx})); q=q.toLowerCase(); return items.map((it,idx)=>{ const lbl=it.label.toLowerCase(); const pos=lbl.indexOf(q); return {score: pos<0?999:pos, label:it.label, action:it.action, index:idx}; }).sort((a,b)=>a.score-b.score); }
+  document.addEventListener('keydown',(e)=>{ if((e.key==='k' && (e.ctrlKey||e.metaKey)) || e.key==='/'){ e.preventDefault(); openCmd(); } if(e.key==='Escape' && cmd.classList.contains('open')) closeCmd(); });
+  cmdInput?.addEventListener('input', (e)=> renderCmd(e.target.value));
+  cmdResults?.addEventListener('click', (e)=>{ const it=e.target.closest('.cmd-item'); if(!it) return; const i=Number(it.getAttribute('data-i')); closeCmd(); commands[i].action(); });
+  cmd?.addEventListener('click', (e)=>{ if(e.target===cmd) closeCmd(); });
+  cmdInput?.addEventListener('keydown', (e)=>{ const items=[...cmdResults.querySelectorAll('.cmd-item')]; const idx = items.findIndex(x=>x.getAttribute('aria-selected')==='true'); if(e.key==='ArrowDown'){ e.preventDefault(); const next=(idx+1)%items.length; items.forEach(x=>x.removeAttribute('aria-selected')); items[next]?.setAttribute('aria-selected','true'); items[next]?.scrollIntoView({block:'nearest'});} if(e.key==='ArrowUp'){ e.preventDefault(); const prev=(idx-1+items.length)%items.length; items.forEach(x=>x.removeAttribute('aria-selected')); items[prev]?.setAttribute('aria-selected','true'); items[prev]?.scrollIntoView({block:'nearest'});} if(e.key==='Enter'){ e.preventDefault(); const sel=items.find(x=>x.getAttribute('aria-selected')==='true')||items[0]; if(sel){ const i=Number(sel.getAttribute('data-i')); closeCmd(); commands[i].action(); }} });
 });

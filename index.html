@@ -47,7 +47,8 @@
       <div class="absolute -top-40 -left-40 h-[36rem] w-[36rem] rounded-full blur-3xl opacity-25 bg-gradient-to-tr from-fuchsia-500 via-sky-400 to-emerald-400 dark:opacity-30"></div>
       <div class="absolute -bottom-40 -right-40 h-[32rem] w-[32rem] rounded-full blur-3xl opacity-20 bg-gradient-to-tr from-emerald-500 via-amber-400 to-pink-500 dark:opacity-25"></div>
       <canvas id="mesh" class="absolute inset-0 w-full h-full opacity-[.18] dark:opacity-[.25]"></canvas>
-      <div id="cursor-glow" class="pointer-events-none absolute h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.25),rgba(56,189,248,0)_60%)] mix-blend-screen"></div>
+      <canvas id="particles" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+      <div id="cursor-glow" class="pointer-events-none absolute left-0 top-0 h-56 w-56 rounded-full bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.28),rgba(56,189,248,0)_60%)] mix-blend-screen"></div>
     </div>
 
     <!-- Navbar -->
@@ -99,6 +100,11 @@
             <span class="animated-gradient">Hi, I’m Ahmed</span>
             <span class="block text-slate-800 dark:text-slate-100">Full‑stack web developer</span>
           </h1>
+          <div class="sig-wrap mt-2">
+            <svg class="signature" viewBox="0 0 300 60" aria-hidden="true">
+              <path d="M5 40 C 40 10, 60 10, 95 40 S 155 70, 185 35 S 235 5, 295 35" fill="none"/>
+            </svg>
+          </div>
           <p class="mt-5 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
             19 y/o developer building real‑world apps with <b>Next.js</b>, <b>Supabase</b>, <b>Node</b>, <b>Tailwind</b>, and <b>Python</b>. I love AI automation, smart UIs, and realtime apps.
           </p>
@@ -117,20 +123,31 @@
         </div>
 
         <div class="order-1 lg:order-2 lg:col-span-5">
-          <div class="relative mx-auto aspect-square w-64 max-w-sm rounded-2xl border border-white/20 bg-gradient-to-br from-slate-50 to-white p-1 shadow-2xl backdrop-blur dark:from-white/5 dark:to-white/0 sm:w-72 lg:w-[28rem]">
-            <div class="relative h-full w-full overflow-hidden rounded-xl bg-white/70 p-6 dark:bg-white/5">
-              <div class="absolute inset-0 bg-[radial-gradient(1000px_300px_at_100%_0%,rgba(56,189,248,.12),transparent),radial-gradient(800px_200px_at_0%_100%,rgba(244,63,94,.12),transparent)]"></div>
-              <div class="relative flex h-full w-full flex-col items-center justify-center gap-2">
-                <div class="shine pointer-events-none absolute inset-0 rounded-xl"></div>
-                <span class="rounded-full border border-white/20 bg-white/60 px-3 py-1 text-xs text-slate-600 backdrop-blur dark:bg-white/10 dark:text-slate-300">Crafting startup‑grade MVPs</span>
-                <span class="font-display text-4xl font-bold tracking-tight">Ahmed</span>
-                <span class="text-sm text-slate-500 dark:text-slate-400">Next.js • Supabase • Python</span>
+          <div class="mx-auto w-full max-w-[28rem]" data-parallax>
+            <div class="relative mx-auto conic-border rounded-full p-[4px]">
+              <div class="avatar-aura"></div>
+              <div class="avatar-inner rounded-full overflow-hidden">
+                <img src="assets/ahmed.png" alt="Ahmed portrait" class="avatar-img" />
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- Divider -->
+    <div aria-hidden="true" class="divider">
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" class="w-full h-[80px]">
+        <defs>
+          <linearGradient id="grad-wave" x1="0" x2="1">
+            <stop offset="0%" stop-color="#38bdf8"/>
+            <stop offset="50%" stop-color="#a78bfa"/>
+            <stop offset="100%" stop-color="#34d399"/>
+          </linearGradient>
+        </defs>
+        <path d="M0,80 C240,120 480,0 720,40 C960,80 1200,120 1440,60 L1440,120 L0,120 Z" fill="url(#grad-wave)" opacity=".25"/>
+      </svg>
+    </div>
 
     <!-- Ticker -->
     <section class="ticker" aria-hidden="true">
@@ -160,6 +177,7 @@
     <section id="projects" class="section">
       <div class="container">
         <h2 class="section-title">Featured Projects</h2>
+        <div id="project-filters" class="mt-4 flex flex-wrap gap-2 text-sm"></div>
         <div id="projects-grid" class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3"></div>
       </div>
     </section>
@@ -204,8 +222,8 @@
     <section id="contact" class="section pb-24">
       <div class="container">
         <h2 class="section-title">Get in Touch</h2>
-        <div class="mt-8 grid gap-6 md:grid-cols-2">
-          <div class="glass p-6">
+        <div class="mt-8 flex justify-center">
+          <div class="glass p-6 w-full max-w-lg">
             <h3 class="text-xl font-semibold">Let’s build something</h3>
             <p class="mt-2 text-slate-600 dark:text-slate-300">DM me on Discord or email me. I reply fast.</p>
             <div class="mt-4 flex flex-col gap-3 text-sm">
@@ -221,15 +239,6 @@
               </button>
             </div>
           </div>
-          <form class="glass p-6" onsubmit="event.preventDefault(); window.location.href='mailto:ahmedashrafyas@gmail.com?subject=Let\'s%20work%20together';">
-            <h3 class="text-xl font-semibold">Quick hello</h3>
-            <div class="mt-4 grid gap-4">
-              <input class="input" placeholder="Your name" required />
-              <input type="email" class="input" placeholder="Your email" required />
-              <textarea class="input min-h-[120px]" placeholder="Your message" required></textarea>
-              <button class="rounded-md bg-gradient-to-r from-sky-500 to-fuchsia-500 px-5 py-3 font-semibold text-white shadow hover:opacity-90">Send</button>
-            </div>
-          </form>
         </div>
       </div>
     </section>
@@ -239,6 +248,34 @@
         <p>© <span id="y"></span> Ahmed. Built with 💙</p>
       </div>
     </footer>
+
+    <!-- Now bar -->
+    <div id="nowbar" class="fixed inset-x-0 bottom-4 z-50 flex justify-center px-4">
+      <div class="nowbar-pill">Available now • <span id="nowbar-time"></span></div>
+    </div>
+
+    <!-- Command Palette -->
+    <div id="cmd" class="hidden fixed inset-0 z-[60] items-start justify-center bg-black/40 p-6 backdrop-blur-sm">
+      <div class="w-full max-w-xl overflow-hidden rounded-xl border border-white/10 bg-white/80 shadow-2xl backdrop-blur dark:bg-[#0b0f17]/80">
+        <div class="flex items-center gap-3 border-b border-white/10 px-4 py-3">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-slate-500"><path d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input id="cmd-input" class="w-full bg-transparent outline-none placeholder:text-slate-400" placeholder="Search sections, projects, or type > to run" autofocus />
+          <span class="text-xs text-slate-500">Esc</span>
+        </div>
+        <div id="cmd-results" class="max-h-[50vh] overflow-y-auto p-2"></div>
+      </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="hidden fixed inset-0 z-[70] bg-black/80 p-6">
+      <button id="lightbox-close" class="absolute right-6 top-6 rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-white">Esc</button>
+      <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-white/10 p-3 text-white">‹</button>
+      <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-white/10 p-3 text-white">›</button>
+      <figure class="mx-auto grid h-full max-w-5xl place-items-center">
+        <img id="lightbox-img" class="max-h-[80vh] w-auto rounded-lg shadow-2xl" alt="Project preview" />
+        <figcaption id="lightbox-caption" class="mt-4 text-center text-sm text-slate-200"></figcaption>
+      </figure>
+    </div>
 
     <script src="script.js"></script>
   </body>
