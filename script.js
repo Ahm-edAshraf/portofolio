@@ -14,6 +14,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const glow = document.getElementById('cursor-glow');
   const mesh = document.getElementById('mesh');
   const particles = document.getElementById('particles');
+  const nowbarTime = document.getElementById('nowbar-time');
 
   // Theme toggle
   themeToggle?.addEventListener('click', () => {
@@ -97,6 +98,14 @@ window.addEventListener('DOMContentLoaded', () => {
   // Footer year
   const y = document.getElementById('y');
   if (y) y.textContent = new Date().getFullYear();
+
+  // Now bar time updater
+  if (nowbarTime) {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const fmt = new Intl.DateTimeFormat([], { hour: '2-digit', minute: '2-digit' });
+    const update = () => { nowbarTime.textContent = `${fmt.format(new Date())} • ${tz}`; };
+    update(); setInterval(update, 30_000);
+  }
 
   // Animated gradient mesh (lightweight blobs)
   if (mesh && mesh.getContext) {
