@@ -79,8 +79,8 @@ window.addEventListener('DOMContentLoaded', () => {
     card.addEventListener('pointerleave', onLeave);
   }
 
-  // Copy to clipboard
-  document.querySelectorAll('.copy-btn').forEach((btn) => {
+  // Copy to clipboard (only for elements that declare data-copy)
+  document.querySelectorAll('.copy-btn[data-copy]').forEach((btn) => {
     btn.addEventListener('click', async () => {
       const text = btn.getAttribute('data-copy');
       try {
