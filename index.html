@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ahmed — Full‑Stack Developer</title>
+    <meta name="description" content="Ahmed • 19 y/o full‑stack developer. Building real apps with Next.js, Supabase, Node, Tailwind, Python." />
+    <meta name="theme-color" content="#0ea5e9" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind via CDN for speed -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'],
+              display: ['Space Grotesk', 'Inter', 'ui-sans-serif']
+            },
+            colors: {
+              brand: {
+                50: '#ecfeff', 100: '#cffafe', 200: '#a5f3fc', 300: '#67e8f9', 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2', 700: '#0e7490', 800: '#155e75', 900: '#164e63'
+              }
+            },
+            boxShadow: {
+              glow: '0 0 0 1px rgba(99,102,241,.5), 0 0 80px -10px rgba(56,189,248,.65)'
+            }
+          }
+        }
+      }
+    </script>
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="bg-white text-gray-900 antialiased dark:bg-[#0b0f17] dark:text-gray-100">
+    <!-- Progress bar -->
+    <div id="progress" class="fixed inset-x-0 top-0 h-1.5 bg-gradient-to-r from-fuchsia-500 via-sky-400 to-emerald-400 origin-left scale-x-0 z-50"></div>
+
+    <!-- Background decorations -->
+    <div aria-hidden="true" class="fixed inset-0 -z-10">
+      <div class="absolute -top-40 -left-40 h-[36rem] w-[36rem] rounded-full blur-3xl opacity-25 bg-gradient-to-tr from-fuchsia-500 via-sky-400 to-emerald-400 dark:opacity-30"></div>
+      <div class="absolute -bottom-40 -right-40 h-[32rem] w-[32rem] rounded-full blur-3xl opacity-20 bg-gradient-to-tr from-emerald-500 via-amber-400 to-pink-500 dark:opacity-25"></div>
+      <canvas id="mesh" class="absolute inset-0 w-full h-full opacity-[.18] dark:opacity-[.25]"></canvas>
+      <div id="cursor-glow" class="pointer-events-none absolute h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.25),rgba(56,189,248,0)_60%)] mix-blend-screen"></div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/50 dark:supports-[backdrop-filter]:bg-black/20">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 items-center justify-between">
+          <a href="#top" class="font-display text-xl font-semibold tracking-tight">
+            <span class="bg-gradient-to-r from-sky-400 via-fuchsia-500 to-emerald-400 bg-clip-text text-transparent">Ahmed</span>
+            <span class="sr-only">Home</span>
+          </a>
+          <nav class="hidden gap-7 text-sm font-medium md:flex">
+            <a href="#about" class="nav-link">About</a>
+            <a href="#projects" class="nav-link">Projects</a>
+            <a href="#stack" class="nav-link">Stack</a>
+            <a href="#stats" class="nav-link">Stats</a>
+            <a href="#contact" class="nav-link">Contact</a>
+          </nav>
+          <div class="flex items-center gap-3">
+            <button id="themeToggle" class="group rounded-full p-2 text-gray-600 transition hover:shadow-glow dark:text-gray-300" aria-label="Toggle theme">
+              <svg class="block h-5 w-5 group-[.dark]:hidden" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z"/><path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.536 6.364-1.414-1.414M7.879 7.879 6.465 6.465m10.607 0-1.414 1.414M7.879 16.121l-1.414 1.414" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <svg class="hidden h-5 w-5 group-[.dark]:block" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.64 13a9 9 0 1 1-10.63-10.63 1 1 0 0 1 1.08 1.52A7 7 0 1 0 20.12 12a1 1 0 0 1 1.52 1.08Z"/></svg>
+            </button>
+            <a href="#contact" class="rounded-full bg-gray-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100">Say hi</a>
+          </div>
+        </div>
+      </div>
+      <div class="md:hidden">
+        <nav class="mx-auto max-w-7xl px-4 pb-3 text-sm font-medium">
+          <div class="flex flex-wrap gap-5 py-2 text-gray-600 dark:text-gray-300">
+            <a href="#about" class="nav-link">About</a>
+            <a href="#projects" class="nav-link">Projects</a>
+            <a href="#stack" class="nav-link">Stack</a>
+            <a href="#stats" class="nav-link">Stats</a>
+            <a href="#contact" class="nav-link">Contact</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="top" class="relative">
+      <div class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 pb-20 pt-16 sm:pt-24 lg:grid-cols-12 lg:gap-16 lg:px-8">
+        <div class="order-2 lg:order-1 lg:col-span-7">
+          <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/60 px-3 py-1 text-xs text-slate-600 backdrop-blur dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
+            <span class="inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-400"></span>
+            Available for any type of work.
+          </div>
+          <h1 class="mt-5 font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
+            <span class="animated-gradient">Hi, I’m Ahmed</span>
+            <span class="block text-slate-800 dark:text-slate-100">Full‑stack web developer</span>
+          </h1>
+          <p class="mt-5 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
+            19 y/o developer building real‑world apps with <b>Next.js</b>, <b>Supabase</b>, <b>Node</b>, <b>Tailwind</b>, and <b>Python</b>. I love AI automation, smart UIs, and realtime apps.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#projects" data-magnetic class="group inline-flex items-center gap-2 rounded-full bg-gray-900 px-5 py-3 text-sm font-semibold text-white shadow hover:shadow-lg hover:shadow-sky-400/30 dark:bg-white dark:text-gray-900" data-ripple>
+              <span>View Projects</span>
+              <svg class="h-4 w-4 transition group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+            <a href="#contact" data-magnetic class="inline-flex items-center gap-2 rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-white/20 dark:text-slate-200 dark:hover:bg-white/10" data-ripple>
+              Contact Me
+            </a>
+          </div>
+          <div class="mt-8 flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+            <span class="inline-flex items-center gap-2"><span class="i-bullet"></span> Based in KAEC, Saudi Arabia / Kuala Lumpur, Malaysia</span>
+          </div>
+        </div>
+
+        <div class="order-1 lg:order-2 lg:col-span-5">
+          <div class="relative mx-auto aspect-square w-64 max-w-sm rounded-2xl border border-white/20 bg-gradient-to-br from-slate-50 to-white p-1 shadow-2xl backdrop-blur dark:from-white/5 dark:to-white/0 sm:w-72 lg:w-[28rem]">
+            <div class="relative h-full w-full overflow-hidden rounded-xl bg-white/70 p-6 dark:bg-white/5">
+              <div class="absolute inset-0 bg-[radial-gradient(1000px_300px_at_100%_0%,rgba(56,189,248,.12),transparent),radial-gradient(800px_200px_at_0%_100%,rgba(244,63,94,.12),transparent)]"></div>
+              <div class="relative flex h-full w-full flex-col items-center justify-center gap-2">
+                <div class="shine pointer-events-none absolute inset-0 rounded-xl"></div>
+                <span class="rounded-full border border-white/20 bg-white/60 px-3 py-1 text-xs text-slate-600 backdrop-blur dark:bg-white/10 dark:text-slate-300">Crafting startup‑grade MVPs</span>
+                <span class="font-display text-4xl font-bold tracking-tight">Ahmed</span>
+                <span class="text-sm text-slate-500 dark:text-slate-400">Next.js • Supabase • Python</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ticker -->
+    <section class="ticker" aria-hidden="true">
+      <div class="container">
+        <div class="ticker__track">
+          <span>Next.js • Supabase • Tailwind • Node.js • Python • TypeScript • Realtime • AI Automation •</span>
+          <span>Next.js • Supabase • Tailwind • Node.js • Python • TypeScript • Realtime • AI Automation •</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="section">
+      <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <p class="section-lead">
+          I enjoy turning ideas into polished products — fast. My current goals are to build MVPs that feel like startups, with clean UX, realtime features, and AI‑powered tooling where it makes sense.
+        </p>
+        <ul class="mt-6 grid gap-4 text-slate-700 dark:text-slate-300 md:grid-cols-2">
+          <li class="glass flex items-start gap-3 p-4"><span class="i-bullet mt-1"></span><span>Tech I work with daily: <b>Next.js</b>, <b>Supabase</b>, <b>Tailwind</b>, <b>Node.js</b>, <b>Express</b>, <b>Python</b>, <b>TypeScript</b>.</span></li>
+          <li class="glass flex items-start gap-3 p-4"><span class="i-bullet mt-1"></span><span>Interests: AI automation, smart UIs, ML tools, realtime apps.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="section">
+      <div class="container">
+        <h2 class="section-title">Featured Projects</h2>
+        <div id="projects-grid" class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3"></div>
+      </div>
+    </section>
+
+    <!-- Stack -->
+    <section id="stack" class="section">
+      <div class="container">
+        <h2 class="section-title">Tech I Use A Lot</h2>
+        <div class="mt-6 flex justify-center">
+          <img alt="Tech stack icons" class="max-w-full rounded-xl border border-white/10 bg-white/50 p-3 shadow dark:bg-white/5" src="https://skillicons.dev/icons?i=nextjs,tailwind,supabase,nodejs,express,python,ts,js,html,css,git,github" />
+        </div>
+
+        <div class="mt-10 grid gap-4 md:grid-cols-2">
+          <div class="glass p-5">
+            <h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Python & AI Tools</h3>
+            <p class="text-slate-700 dark:text-slate-300">
+              pandas · numpy · matplotlib · seaborn · scikit‑learn · xgboost · lightgbm · optuna<br/>
+              openai · langchain · transformers · whisper · tiktoken<br/>
+              flask · fastapi · sqlalchemy · requests
+            </p>
+          </div>
+          <div class="glass p-5">
+            <h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">What I’m into</h3>
+            <p class="text-slate-700 dark:text-slate-300">AI agents, realtime collaboration, delightful micro‑interactions, and shipping fast.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section id="stats" class="section">
+      <div class="container">
+        <h2 class="section-title">GitHub Stats</h2>
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-6">
+          <img src="https://github-readme-stats.vercel.app/api?username=Ahm-edAshraf&show_icons=true&theme=radical" alt="GitHub stats" class="h-[180px] rounded-xl border border-white/10 bg-white/60 p-2 shadow dark:bg-white/5" />
+          <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Ahm-edAshraf&layout=compact&theme=radical" alt="Top languages" class="h-[180px] rounded-xl border border-white/10 bg-white/60 p-2 shadow dark:bg-white/5" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section pb-24">
+      <div class="container">
+        <h2 class="section-title">Get in Touch</h2>
+        <div class="mt-8 grid gap-6 md:grid-cols-2">
+          <div class="glass p-6">
+            <h3 class="text-xl font-semibold">Let’s build something</h3>
+            <p class="mt-2 text-slate-600 dark:text-slate-300">DM me on Discord or email me. I reply fast.</p>
+            <div class="mt-4 flex flex-col gap-3 text-sm">
+              <button data-copy="luhahmed" class="copy-btn">
+                <span class="font-mono">Discord</span>
+                <span class="grow"></span>
+                <span class="text-slate-500">luhahmed</span>
+              </button>
+              <button data-copy="ahmedashrafyas@gmail.com" class="copy-btn">
+                <span class="font-mono">Email</span>
+                <span class="grow"></span>
+                <span class="text-slate-500">ahmedashrafyas@gmail.com</span>
+              </button>
+            </div>
+          </div>
+          <form class="glass p-6" onsubmit="event.preventDefault(); window.location.href='mailto:ahmedashrafyas@gmail.com?subject=Let\'s%20work%20together';">
+            <h3 class="text-xl font-semibold">Quick hello</h3>
+            <div class="mt-4 grid gap-4">
+              <input class="input" placeholder="Your name" required />
+              <input type="email" class="input" placeholder="Your email" required />
+              <textarea class="input min-h-[120px]" placeholder="Your message" required></textarea>
+              <button class="rounded-md bg-gradient-to-r from-sky-500 to-fuchsia-500 px-5 py-3 font-semibold text-white shadow hover:opacity-90">Send</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer class="border-t border-white/10 py-10 text-center text-sm text-slate-500">
+      <div class="container">
+        <p>© <span id="y"></span> Ahmed. Built with 💙</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+  </html>
