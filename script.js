@@ -205,6 +205,14 @@ window.addEventListener('DOMContentLoaded', () => {
       tags: ['ai','python','web']
     },
     {
+      title: 'Resume-Job Matcher',
+      href: 'https://github.com/Ahm-edAshraf/resume-parser',
+      desc: 'NLP pipeline for intelligent resume‑job matching with semantic similarity and keyword analysis.',
+      tech: 'Python • NLP • ML • Colab',
+      image: 'assets/placeholder.svg',
+      tags: ['ai','python','nlp','ml']
+    },
+    {
       title: 'FormAI',
       href: 'https://github.com/Ahm-edAshraf/FormAi',
       desc: 'AI‑powered form builder to generate, customize, and validate forms with natural language prompts.',
