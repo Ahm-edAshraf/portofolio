@@ -197,6 +197,14 @@ window.addEventListener('DOMContentLoaded', () => {
   // Modular projects rendering
   const projects = [
     {
+      title: 'NCR Ride Booking Analytics',
+      href: 'https://github.com/Ahm-edAshraf/streamlit-uber-dataset-prediction',
+      desc: 'Interactive NCR ride analytics with ML‑based completion predictions, KPIs, and model insights.',
+      tech: 'Python • Streamlit • LightGBM',
+      image: 'assets/dashboard-preview.jpeg',
+      tags: ['python','ml','streamlit','dashboard']
+    },
+    {
       title: 'AI Code Reviewer',
       href: 'https://github.com/Ahm-edAshraf/ai-code-reviewer',
       desc: 'Uses Gemini API to review PRs, suggest improvements, and comment automatically via GitHub webhooks.',
