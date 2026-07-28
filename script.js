@@ -19,7 +19,6 @@ const repositories = [
   { name: 'n8n', year: '2025', category: ['automation'], stack: 'n8n · Render · PostgreSQL', desc: 'A compact deployment scaffold for a persistent n8n automation environment.' },
   { name: 'apu-student-help', year: '2025', category: ['product', 'data'], stack: 'Next.js · Supabase · Gemini · PWA', desc: 'AI study companion with tasks, timetable, document vault, analytics, and offline support.' },
   { name: 'saad-website', year: '2025', category: ['product', 'experiment'], stack: 'JavaScript · Chart.js · PDF · CSV', desc: 'VetSync clinic management prototype with records, reports, and operational dashboards.' },
-  { name: 'mothers-day', year: '2025', category: ['experiment'], stack: 'HTML · CSS · JavaScript', desc: 'A small, expressive browser experience built as a personal Mother’s Day gift.' },
   { name: 'SADAQAPP', year: '2025', category: ['product'], stack: 'Next.js · TypeScript · Accessibility', desc: 'Voice-first, Shariah-compliant financial aid prototype for donors and beneficiaries.' },
   { name: 'MarkdownCSS2PDF', year: '2025', category: ['product', 'automation'], stack: 'JavaScript · Marked · html2pdf', desc: 'Fully client-side Markdown and custom CSS editor with live preview and PDF export.' },
   { name: 'character-stats', year: '2025', category: ['product', 'experiment'], stack: 'Node.js · JavaScript · MongoDB', desc: 'Authenticated character-sheet builder for stats, techniques, inventory, and backstory.' },
