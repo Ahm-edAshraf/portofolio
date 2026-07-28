@@ -1,404 +1,312 @@
-// Theme setup
-(function () {
-  const html = document.documentElement;
-  const stored = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if (stored === 'dark' || (!stored && prefersDark)) html.classList.add('dark');
-})();
+document.documentElement.classList.add('js');
 
-// DOM ready
-window.addEventListener('DOMContentLoaded', () => {
-  const html = document.documentElement;
-  const themeToggle = document.getElementById('themeToggle');
-  const progress = document.getElementById('progress');
-  const glow = document.getElementById('cursor-glow');
-  const mesh = document.getElementById('mesh');
-  const particles = document.getElementById('particles');
-  const nowbarTime = document.getElementById('nowbar-time');
+const repositories = [
+  { name: 'siap-chutes', year: '2026', category: ['product', 'data'], stack: 'Next.js · Convex · Chutes TEE · OCR', desc: 'Privacy-first application copilot with four parallel confidential-compute agents.' },
+  { name: 'stupider-discord-bot', year: '2026', category: ['automation', 'experiment'], stack: 'Bun · TypeScript · Discord.js · SQLite', desc: 'Voice, music, and personality-aware AI bot with bounded memory and usage controls.' },
+  { name: 'gear-guard', year: '2026', category: ['product'], stack: 'Next.js · React · TypeScript', desc: 'Campus equipment booking and return tracking with conflict prevention.' },
+  { name: 'FormAi', year: '2026', category: ['product', 'data'], stack: 'Next.js · Convex · Clerk · Groq', desc: 'Prompt-to-form product with a visual builder, publishing, workspaces, and analytics.' },
+  { name: 'stupid-discord-bot', year: '2026', category: ['automation', 'experiment'], stack: 'Python · discord.py', desc: 'A modular slash-command Discord bot foundation with safe sync workflows.' },
+  { name: 'FactoryPulse-Lite', year: '2026', category: ['data', 'product'], stack: 'Python · XGBoost · Streamlit · SHAP', desc: 'Predictive maintenance, RUL forecasting, change-point detection, and action planning.' },
+  { name: 'receipt-ai', year: '2026', category: ['product', 'data'], stack: 'Electron · TypeScript · Groq · Excel', desc: 'Desktop workflow for extracting, reviewing, and exporting structured receipt data.' },
+  { name: 'Jo.-', year: '2026', category: ['automation', 'experiment'], stack: 'Python · Lavalink · Discord.py', desc: 'A deployable Discord music bot with queues, filters, seeking, and playback controls.' },
+  { name: 'mafia-ai', year: '2026', category: ['product', 'data', 'experiment'], stack: 'Next.js · Convex · Groq · Realtime', desc: 'Realtime Mafia game with live chat, spectators, timed phases, and AI players.' },
+  { name: 'hackathon-sidi', year: '2025', category: ['product', 'data'], stack: 'Next.js · AWS · OCR · Bedrock', desc: 'Ledgerly: an AI accounting copilot for reports, expense intelligence, and forecasting.' },
+  { name: 'hackathon-sar', year: '2025', category: ['product', 'automation', 'data'], stack: 'Next.js · AWS · MCP · Leaflet', desc: 'Search-and-rescue mission console with live events, maps, routing, and MCP tools.' },
+  { name: 'ai-debater', year: '2025', category: ['product', 'data', 'experiment'], stack: 'Next.js · Bun · Gemini', desc: 'Two AI debaters argue in turns while a user nudges each side and a judge scores the round.' },
+  { name: 'streamlit-uber-dataset-prediction', year: '2025', category: ['data', 'product'], stack: 'Python · LightGBM · Streamlit · Plotly', desc: 'NCR ride analytics and real-time completion prediction across 150,000+ records.' },
+  { name: 'resume-parser', year: '2025', category: ['data'], stack: 'Python · spaCy · KeyBERT · Transformers', desc: 'Resume-to-job matching with semantic similarity, keyword extraction, and skill-gap analysis.' },
+  { name: 'ai-code-reviewer', year: '2025', category: ['automation', 'data'], stack: 'Python · Flask · Gemini · GitHub API', desc: 'GitHub App that turns pull-request diffs into severity-ranked review comments.' },
+  { name: 'n8n', year: '2025', category: ['automation'], stack: 'n8n · Render · PostgreSQL', desc: 'A compact deployment scaffold for a persistent n8n automation environment.' },
+  { name: 'apu-student-help', year: '2025', category: ['product', 'data'], stack: 'Next.js · Supabase · Gemini · PWA', desc: 'AI study companion with tasks, timetable, document vault, analytics, and offline support.' },
+  { name: 'saad-website', year: '2025', category: ['product', 'experiment'], stack: 'JavaScript · Chart.js · PDF · CSV', desc: 'VetSync clinic management prototype with records, reports, and operational dashboards.' },
+  { name: 'mothers-day', year: '2025', category: ['experiment'], stack: 'HTML · CSS · JavaScript', desc: 'A small, expressive browser experience built as a personal Mother’s Day gift.' },
+  { name: 'SADAQAPP', year: '2025', category: ['product'], stack: 'Next.js · TypeScript · Accessibility', desc: 'Voice-first, Shariah-compliant financial aid prototype for donors and beneficiaries.' },
+  { name: 'MarkdownCSS2PDF', year: '2025', category: ['product', 'automation'], stack: 'JavaScript · Marked · html2pdf', desc: 'Fully client-side Markdown and custom CSS editor with live preview and PDF export.' },
+  { name: 'character-stats', year: '2025', category: ['product', 'experiment'], stack: 'Node.js · JavaScript · MongoDB', desc: 'Authenticated character-sheet builder for stats, techniques, inventory, and backstory.' },
+  { name: 'career-plan', year: '2024', category: ['product', 'experiment'], stack: 'React · JavaScript', desc: 'An early interactive career-planning experience deployed as a static web app.' },
+  { name: 'tedx-barcodes', year: '2024', category: ['automation', 'experiment'], stack: 'JavaScript · HTML · CSS', desc: 'Barcode-based TEDx event check-in tool with fast attendee validation.' },
+  { name: 'aloruba-events', year: '2024', category: ['product', 'experiment'], stack: 'HTML · CSS · JavaScript · PHP', desc: 'An early school events site with a lightweight submission workflow.' },
+  { name: 'buss', year: '2023', category: ['experiment'], stack: 'Lua', desc: 'The first public repository in the timeline: a compact Lua scripting experiment.' }
+];
 
-  // Theme toggle
-  themeToggle?.addEventListener('click', () => {
-    html.classList.toggle('dark');
-    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
-    // swap button icon state class for svg grouping
-    themeToggle.classList.toggle('dark', html.classList.contains('dark'));
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function initRepositoryAtlas() {
+  const grid = document.querySelector('#repo-grid');
+  const controls = document.querySelector('.atlas-controls');
+  if (!grid || !controls) return;
+
+  grid.innerHTML = repositories.map((repo) => `
+    <a class="repo-card reveal is-visible" data-category="${repo.category.join(' ')}" href="https://github.com/Ahm-edAshraf/${encodeURIComponent(repo.name)}" target="_blank" rel="noreferrer">
+      <div class="repo-meta"><i></i><span>${repo.category[0]}</span><span>/ ${repo.year}</span></div>
+      <h3>${repo.name}</h3>
+      <p>${repo.desc}</p>
+      <span class="repo-stack">${repo.stack}</span>
+    </a>
+  `).join('');
+
+  controls.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-filter]');
+    if (!button) return;
+    const filter = button.dataset.filter;
+    controls.querySelectorAll('[data-filter]').forEach((item) => {
+      const active = item === button;
+      item.classList.toggle('is-active', active);
+      item.setAttribute('aria-pressed', String(active));
+    });
+    grid.querySelectorAll('.repo-card').forEach((card) => {
+      const matches = filter === 'all' || card.dataset.category.split(' ').includes(filter);
+      card.hidden = !matches;
+    });
   });
+}
 
-  // Scroll progress
-  const setProgress = () => {
-    const h = document.documentElement;
-    const scrolled = h.scrollTop;
-    const total = h.scrollHeight - h.clientHeight || 1;
-    const pct = Math.min(1, Math.max(0, scrolled / total));
-    progress.style.transform = `scaleX(${pct})`;
-  };
-  setProgress();
-  window.addEventListener('scroll', setProgress, { passive: true });
-
-  // Cursor glow follow (RAF & no transition lag)
-  let gx = innerWidth / 2, gy = innerHeight / 2, needGlowUpdate = false;
-  const queueGlow = (e) => { gx = e.clientX; gy = e.clientY; needGlowUpdate = true; };
-  window.addEventListener('pointermove', queueGlow, { passive: true });
-  window.addEventListener('mousemove', queueGlow, { passive: true });
-  (function glowRAF(){
-    if (needGlowUpdate) {
-      glow.style.left = `${Math.round(gx)}px`;
-      glow.style.top = `${Math.round(gy)}px`;
-      needGlowUpdate = false;
-    }
-    requestAnimationFrame(glowRAF);
-  })();
-
-  // Section reveal
-  const sections = [...document.querySelectorAll('section')];
-  const io = new IntersectionObserver((entries) => {
+function initReveals() {
+  const items = [...document.querySelectorAll('.reveal:not(.is-visible)')];
+  if (reducedMotion || !('IntersectionObserver' in window)) {
+    items.forEach((item) => item.classList.add('is-visible'));
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        io.unobserve(entry.target);
-      }
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
     });
-  }, { threshold: 0.15 });
-  sections.forEach((s) => io.observe(s));
+  }, { threshold: 0.11, rootMargin: '0px 0px -5% 0px' });
+  items.forEach((item) => observer.observe(item));
+}
 
-  // Project tilt effect (no lib)
-  const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
-  function attachTilt(card) {
-    const inner = card.querySelector('.project-card-inner');
-    const rectFor = () => inner.getBoundingClientRect();
-    const onMove = (e) => {
-      const r = rectFor();
-      const px = (e.clientX - r.left) / r.width; // 0..1
-      const py = (e.clientY - r.top) / r.height; // 0..1
-      const rx = clamp((0.5 - py) * 10, -8, 8);
-      const ry = clamp((px - 0.5) * 12, -10, 10);
-      inner.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
-    };
-    const onLeave = () => { inner.style.transform = 'rotateX(0) rotateY(0)'; };
-    card.addEventListener('pointermove', onMove);
-    card.addEventListener('pointerleave', onLeave);
-  }
-
-  // Copy to clipboard (only for elements that declare data-copy)
-  document.querySelectorAll('.copy-btn[data-copy]').forEach((btn) => {
-    btn.addEventListener('click', async () => {
-      const text = btn.getAttribute('data-copy');
-      try {
-        await navigator.clipboard.writeText(text);
-        const prev = btn.innerHTML;
-        btn.innerHTML = `<span class="font-mono">Copied</span><span class="grow"></span><span class="text-emerald-500">${text}</span>`;
-        btn.style.boxShadow = '0 8px 24px rgba(16,185,129,.25)';
-        setTimeout(() => { btn.innerHTML = prev; btn.style.boxShadow = ''; }, 1600);
-      } catch (e) {
-        alert('Copy failed, text: ' + text);
-      }
-    })
-  });
-
-  // Footer year
-  const y = document.getElementById('y');
-  if (y) y.textContent = new Date().getFullYear();
-
-  // Now bar time updater
-  if (nowbarTime) {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const fmt = new Intl.DateTimeFormat([], { hour: '2-digit', minute: '2-digit' });
-    const update = () => { nowbarTime.textContent = `${fmt.format(new Date())} • ${tz}`; };
-    update(); setInterval(update, 30_000);
-  }
-
-  // Live-ish refresh for GitHub stat images (cache-busting)
-  function stamped(url, bucketMs = 10 * 60 * 1000) { // 10 min buckets
-    try {
-      const u = new URL(url, location.href);
-      u.searchParams.set('ts', Math.floor(Date.now() / bucketMs));
-      return u.toString();
-    } catch { return url; }
-  }
-  function refreshStats(force = false) {
-    document.querySelectorAll('img.gh-stat').forEach((img) => {
-      const base = img.getAttribute('data-src') || img.src;
-      let next = stamped(base);
-      if (force) next += `&r=${Math.random().toString(36).slice(2)}`;
-      img.src = next;
-    });
-  }
-  refreshStats(false);
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshStats(false); });
-  window.addEventListener('focus', () => refreshStats(false));
-  document.getElementById('refresh-stats')?.addEventListener('click', () => refreshStats(true));
-
-  // Animated gradient mesh (lightweight blobs)
-  if (mesh && mesh.getContext) {
-    const ctx = mesh.getContext('2d');
-    const DPR = Math.min(2, window.devicePixelRatio || 1);
-    let w, h;
-    const blobs = [];
-    const BLOB_COUNT = 14;
-
-    function resize() {
-      w = mesh.clientWidth; h = mesh.clientHeight;
-      mesh.width = Math.floor(w * DPR);
-      mesh.height = Math.floor(h * DPR);
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    function rand(a, b) { return a + Math.random() * (b - a); }
-    function initBlobs() {
-      blobs.length = 0;
-      for (let i = 0; i < BLOB_COUNT; i++) {
-        blobs.push({
-          x: rand(0, w), y: rand(0, h), r: rand(50, 160),
-          dx: rand(-0.4, 0.4), dy: rand(-0.35, 0.35),
-          hue: rand(170, 330), alpha: rand(0.08, 0.25)
-        })
-      }
-    }
-    initBlobs();
-
-    function tick() {
-      ctx.clearRect(0, 0, w, h);
-      ctx.globalCompositeOperation = 'lighter';
-      for (const b of blobs) {
-        const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
-        const c1 = `hsla(${b.hue}, 95%, 60%, ${b.alpha})`;
-        const c0 = `hsla(${b.hue + 40}, 95%, 60%, ${b.alpha * 0.8})`;
-        g.addColorStop(0, c1);
-        g.addColorStop(1, 'hsla(0,0%,100%,0)');
-        ctx.fillStyle = g;
-        ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill();
-        b.x += b.dx; b.y += b.dy;
-        if (b.x < -50 || b.x > w + 50) b.dx *= -1;
-        if (b.y < -50 || b.y > h + 50) b.dy *= -1;
-      }
-      requestAnimationFrame(tick);
-    }
-    tick();
-  }
-
-  // Parallax elements
-  const parallaxEls = document.querySelectorAll('[data-parallax]');
-  if (parallaxEls.length) {
-    const onParallax = (e) => {
-      const cx = (e.clientX / innerWidth) - 0.5;
-      const cy = (e.clientY / innerHeight) - 0.5;
-      parallaxEls.forEach((el, i) => {
-        const depth = 6 + i * 2;
-        el.style.transform = `translate3d(${cx * depth}px, ${cy * depth}px, 0)`;
-      });
-    };
-    window.addEventListener('pointermove', onParallax, { passive: true });
-  }
-
-  // Contact form: UI-only (no submission)
-
-  // Modular projects rendering
-  const projects = [
-    {
-      title: 'NCR Ride Booking Analytics',
-      href: 'https://github.com/Ahm-edAshraf/streamlit-uber-dataset-prediction',
-      desc: 'Interactive NCR ride analytics with ML‑based completion predictions, KPIs, and model insights.',
-      tech: 'Python • Streamlit • LightGBM',
-      image: 'assets/dashboard-preview.jpeg',
-      tags: ['python','ml','streamlit','dashboard']
-    },
-    {
-      title: 'AI Code Reviewer',
-      href: 'https://github.com/Ahm-edAshraf/ai-code-reviewer',
-      desc: 'Uses Gemini API to review PRs, suggest improvements, and comment automatically via GitHub webhooks.',
-      tech: 'Python • Flask • Webhooks',
-      image: 'assets/codereviewer.jpeg',
-      tags: ['ai','python','web']
-    },
-    {
-      title: 'Resume-Job Matcher',
-      href: 'https://github.com/Ahm-edAshraf/resume-parser',
-      desc: 'NLP pipeline for intelligent resume‑job matching with semantic similarity and keyword analysis.',
-      tech: 'Python • NLP • ML • Colab',
-      image: 'assets/placeholder.svg',
-      tags: ['ai','python','nlp','ml']
-    },
-    {
-      title: 'FormAI',
-      href: 'https://github.com/Ahm-edAshraf/FormAi',
-      desc: 'AI‑powered form builder to generate, customize, and validate forms with natural language prompts.',
-      tech: 'Next.js • Supabase • Tailwind',
-      image: 'assets/formai.jpeg',
-      tags: ['nextjs','supabase','web','ai']
-    },
-    {
-      title: 'APU Student Help',
-      href: 'https://github.com/Ahm-edAshraf/apu-student-help',
-      desc: 'Peer‑assist platform for university students to exchange help and resources.',
-      tech: 'Node.js • Express • Web',
-      image: 'assets/studenthelp.jpeg',
-      tags: ['node','express','web']
-    }
-  ];
-
-  const grid = document.getElementById('projects-grid');
-  const filtersEl = document.getElementById('project-filters');
-  let activeTags = new Set();
-  function renderFilters() {
-    if (!filtersEl) return;
-    const all = Array.from(new Set(projects.flatMap(p => p.tags || [])));
-    filtersEl.innerHTML = all.map(tag => `<button class="chip" data-tag="${tag}" data-active="${activeTags.has(tag)}">#${tag}</button>`).join('');
-  }
-  function renderProjects() {
-    if (!grid) return;
-    const list = projects.filter(p => activeTags.size === 0 || (p.tags || []).some(t => activeTags.has(t)));
-    grid.innerHTML = list.map((p, idx) => {
-      const placeholder = 'assets/placeholder.svg';
-      const imgSrc = p.image || placeholder;
-      const originalIndex = projects.indexOf(p);
-      return `
-        <a href="${p.href}" target="_blank" rel="noopener" class="project-card group" data-ripple data-index="${originalIndex}">
-          <div class="project-card-inner">
-            <figure class="project-media" data-lightbox="${originalIndex}">
-              <img src="${imgSrc}" alt="${p.title} preview" loading="lazy" decoding="async" sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"/>
-            </figure>
-            <div class="project-badge mt-3">${p.tech}</div>
-            <h3 class="project-title">${p.title}</h3>
-            <p class="project-desc">${p.desc}</p>
-            <div class="project-cta">View Repo →</div>
-            <div class="shine pointer-events-none absolute inset-0 rounded-xl"></div>
-          </div>
-        </a>`;
-    }).join('');
-    grid.querySelectorAll('.project-card').forEach((card) => attachTilt(card));
-  }
-  renderFilters();
-  renderProjects();
-  filtersEl?.addEventListener('click', (e) => {
-    const btn = e.target.closest('.chip');
-    if (!btn) return;
-    const tag = btn.getAttribute('data-tag');
-    if (activeTags.has(tag)) activeTags.delete(tag); else activeTags.add(tag);
-    renderFilters();
-    renderProjects();
-  });
-
-  // Lightbox
-  const lb = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lightbox-img');
-  const lbCap = document.getElementById('lightbox-caption');
-  const lbPrev = document.getElementById('lightbox-prev');
-  const lbNext = document.getElementById('lightbox-next');
-  const lbClose = document.getElementById('lightbox-close');
-  function openLightbox(index) {
-    const p = projects[index];
-    if (!p) return;
-    lbImg.src = p.image || 'assets/placeholder.svg';
-    lbCap.textContent = `${p.title} — ${p.tech}`;
-    lb.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    lb.dataset.index = index;
-  }
-  function closeLightbox() {
-    lb.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  function navLightbox(dir) {
-    const cur = Number(lb.dataset.index || 0);
-    const next = (cur + dir + projects.length) % projects.length;
-    openLightbox(next);
-  }
-  grid?.addEventListener('click', (e) => {
-    const fig = e.target.closest('[data-lightbox]');
-    if (!fig) return;
-    e.preventDefault();
-    const idx = Number(fig.getAttribute('data-lightbox'));
-    openLightbox(idx);
-  });
-  lbClose?.addEventListener('click', closeLightbox);
-  lbPrev?.addEventListener('click', () => navLightbox(-1));
-  lbNext?.addEventListener('click', () => navLightbox(1));
-  lb?.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
-  window.addEventListener('keydown', (e) => {
-    if (!lb.classList.contains('open')) return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') navLightbox(-1);
-    if (e.key === 'ArrowRight') navLightbox(1);
-  });
-
-  // Magnetic buttons
-  document.querySelectorAll('[data-magnetic]').forEach((el) => {
-    const strength = 12; // px
-    let rect;
-    const onEnter = () => { rect = el.getBoundingClientRect(); };
-    const onMove = (e) => {
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      el.style.transform = `translate(${(x/rect.width)*strength}px, ${(y/rect.height)*strength}px)`;
-    };
-    const onLeave = () => { el.style.transform = 'translate(0,0)'; };
-    el.addEventListener('pointerenter', onEnter);
-    el.addEventListener('pointermove', onMove);
-    el.addEventListener('pointerleave', onLeave);
-  });
-
-  // Ripple on click for elements with data-ripple
-  document.body.addEventListener('click', (e) => {
-    const el = e.target.closest('[data-ripple]');
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const ripple = document.createElement('span');
-    ripple.className = 'ripple';
-    ripple.style.left = `${e.clientX - r.left}px`;
-    ripple.style.top = `${e.clientY - r.top}px`;
-    el.style.position = getComputedStyle(el).position === 'static' ? 'relative' : getComputedStyle(el).position;
-    el.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 650);
+function initProgress() {
+  const progress = document.querySelector('#scroll-progress');
+  if (!progress) return;
+  let queued = false;
+  const update = () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    progress.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+    queued = false;
+  };
+  addEventListener('scroll', () => {
+    if (!queued) requestAnimationFrame(update);
+    queued = true;
   }, { passive: true });
+  update();
+}
 
-  // Particle cursor + confetti
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (particles && particles.getContext && !prefersReduced) {
-    const ctx = particles.getContext('2d');
-    const DPR = Math.min(2, window.devicePixelRatio || 1);
-    let w, h; const P = [];
-    function resizeP() { w = particles.clientWidth; h = particles.clientHeight; particles.width = w * DPR; particles.height = h * DPR; ctx.setTransform(DPR,0,0,DPR,0,0);} resizeP();
-    window.addEventListener('resize', resizeP);
-    function spawn(x,y, opts={}){ const n=opts.n||6; for(let i=0;i<n;i++){ const a=Math.random()*Math.PI*2; const v=(opts.v||1)+Math.random()*1.5; P.push({x,y, vx:Math.cos(a)*v, vy:Math.sin(a)*v - (opts.up||0), life:opts.life||40, r:Math.random()*2+1, c: opts.color||`hsla(${Math.random()*360},90%,60%,1)`}); } }
-    let lastX=innerWidth/2,lastY=innerHeight/2; let frame=0;
-    window.addEventListener('pointermove', (e)=>{ lastX=e.clientX; lastY=e.clientY; if(frame%2===0) spawn(lastX,lastY,{n:3, v:0.8, up:0.4, life:28, color:'hsla(200,90%,70%,1)'}); }, {passive:true});
-    function tickP(){ frame++; ctx.clearRect(0,0,w,h); P.forEach((p,i)=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=0.03; p.life--; ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); });
-      for(let i=P.length-1;i>=0;i--){ if(P[i].life<=0) P.splice(i,1); }
-      requestAnimationFrame(tickP);
-    } tickP();
-    window.confettiBurst = (x,y)=> spawn(x,y,{n:24, v:2.6, up:1.2, life:48});
-  }
+function initRotatingWord() {
+  const element = document.querySelector('.hero-shift');
+  if (!element || reducedMotion) return;
+  const words = element.dataset.words.split(',');
+  let wordIndex = 0;
+  let removing = false;
+  let cursor = words[0].length;
 
-  // Confetti when copying contact info
-  document.querySelectorAll('.copy-btn').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      if (window.confettiBurst) window.confettiBurst(e.clientX, e.clientY);
-    });
+  const tick = () => {
+    const word = words[wordIndex];
+    if (!removing) {
+      cursor += 1;
+      element.textContent = word.slice(0, cursor);
+      if (cursor >= word.length) {
+        removing = true;
+        setTimeout(tick, 1450);
+        return;
+      }
+    } else {
+      cursor -= 1;
+      element.textContent = word.slice(0, Math.max(0, cursor));
+      if (cursor <= 0) {
+        removing = false;
+        wordIndex = (wordIndex + 1) % words.length;
+      }
+    }
+    setTimeout(tick, removing ? 52 : 82);
+  };
+  setTimeout(() => { removing = true; tick(); }, 1600);
+}
+
+function initTime() {
+  const time = document.querySelector('#local-time');
+  if (!time) return;
+  const formatter = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Kuala_Lumpur',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
   });
+  const render = () => { time.textContent = `MYT ${formatter.format(new Date())}`; };
+  render();
+  setInterval(render, 30_000);
+}
 
-  // Command palette
-  const cmd = document.getElementById('cmd');
-  const cmdInput = document.getElementById('cmd-input');
-  const cmdResults = document.getElementById('cmd-results');
-  const commands = [
-    { label: 'Go to About', action: () => document.getElementById('about').scrollIntoView({behavior:'smooth'}) },
-    { label: 'Go to Projects', action: () => document.getElementById('projects').scrollIntoView({behavior:'smooth'}) },
-    { label: 'Go to Stack', action: () => document.getElementById('stack').scrollIntoView({behavior:'smooth'}) },
-    { label: 'Go to Stats', action: () => document.getElementById('stats').scrollIntoView({behavior:'smooth'}) },
-    { label: 'Go to Contact', action: () => document.getElementById('contact').scrollIntoView({behavior:'smooth'}) },
-    { label: 'Open GitHub Profile', action: () => window.open('https://github.com/Ahm-edAshraf','_blank') },
-    ...projects.map((p) => ({ label: `Open: ${p.title}`, action: () => window.open(p.href,'_blank') }))
-  ];
-  function openCmd(){ cmd.classList.add('open'); cmd.classList.remove('hidden'); cmdInput.value=''; renderCmd(''); cmdInput.focus(); document.body.style.overflow='hidden'; }
-  function closeCmd(){ cmd.classList.remove('open'); cmd.classList.add('hidden'); document.body.style.overflow=''; }
-  function renderCmd(q){ const r = fuzzyFilter(commands, q); cmdResults.innerHTML = r.map((c,i)=>`<div class="cmd-item" data-i="${c.index}" ${i===0?'aria-selected="true"':''}>${highlight(c.label,q)}</div>`).join(''); }
-  function highlight(text,q){ if(!q) return text; const i=text.toLowerCase().indexOf(q.toLowerCase()); if(i<0) return text; return text.slice(0,i)+`<mark class="bg-transparent text-sky-400">`+text.slice(i,i+q.length)+`</mark>`+text.slice(i+q.length); }
-  function fuzzyFilter(items, q){ if(!q) return items.map((it,idx)=>({label:it.label, action:it.action, index:idx})); q=q.toLowerCase(); return items.map((it,idx)=>{ const lbl=it.label.toLowerCase(); const pos=lbl.indexOf(q); return {score: pos<0?999:pos, label:it.label, action:it.action, index:idx}; }).sort((a,b)=>a.score-b.score); }
-  document.addEventListener('keydown',(e)=>{ if((e.key==='k' && (e.ctrlKey||e.metaKey)) || e.key==='/'){ e.preventDefault(); openCmd(); } if(e.key==='Escape' && cmd.classList.contains('open')) closeCmd(); });
-  cmdInput?.addEventListener('input', (e)=> renderCmd(e.target.value));
-  cmdResults?.addEventListener('click', (e)=>{ const it=e.target.closest('.cmd-item'); if(!it) return; const i=Number(it.getAttribute('data-i')); closeCmd(); commands[i].action(); });
-  cmd?.addEventListener('click', (e)=>{ if(e.target===cmd) closeCmd(); });
-  cmdInput?.addEventListener('keydown', (e)=>{ const items=[...cmdResults.querySelectorAll('.cmd-item')]; const idx = items.findIndex(x=>x.getAttribute('aria-selected')==='true'); if(e.key==='ArrowDown'){ e.preventDefault(); const next=(idx+1)%items.length; items.forEach(x=>x.removeAttribute('aria-selected')); items[next]?.setAttribute('aria-selected','true'); items[next]?.scrollIntoView({block:'nearest'});} if(e.key==='ArrowUp'){ e.preventDefault(); const prev=(idx-1+items.length)%items.length; items.forEach(x=>x.removeAttribute('aria-selected')); items[prev]?.setAttribute('aria-selected','true'); items[prev]?.scrollIntoView({block:'nearest'});} if(e.key==='Enter'){ e.preventDefault(); const sel=items.find(x=>x.getAttribute('aria-selected')==='true')||items[0]; if(sel){ const i=Number(sel.getAttribute('data-i')); closeCmd(); commands[i].action(); }} });
-});
+function initHeroDepth() {
+  if (reducedMotion || !matchMedia('(pointer: fine)').matches) return;
+  const system = document.querySelector('#hero-system');
+  if (!system) return;
+  system.addEventListener('pointermove', (event) => {
+    const bounds = system.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - .5;
+    const y = (event.clientY - bounds.top) / bounds.height - .5;
+    system.style.transform = `perspective(1100px) rotateX(${y * -3}deg) rotateY(${x * 4}deg) translateZ(0)`;
+  });
+  system.addEventListener('pointerleave', () => { system.style.transform = ''; });
+
+  document.querySelectorAll('.magnetic').forEach((item) => {
+    item.addEventListener('pointermove', (event) => {
+      const bounds = item.getBoundingClientRect();
+      const x = event.clientX - bounds.left - bounds.width / 2;
+      const y = event.clientY - bounds.top - bounds.height / 2;
+      item.style.transform = `translate(${x * .07}px, ${y * .1}px) translateY(-2px)`;
+    });
+    item.addEventListener('pointerleave', () => { item.style.transform = ''; });
+  });
+}
+
+function initCommandMenu() {
+  const trigger = document.querySelector('#command-trigger');
+  const menu = document.querySelector('#command-menu');
+  if (!trigger || !menu) return;
+  let previousFocus = null;
+
+  const open = () => {
+    previousFocus = document.activeElement;
+    menu.hidden = false;
+    document.body.classList.add('menu-open');
+    menu.querySelector('a')?.focus();
+  };
+  const close = () => {
+    menu.hidden = true;
+    document.body.classList.remove('menu-open');
+    previousFocus?.focus();
+  };
+  trigger.addEventListener('click', open);
+  menu.querySelectorAll('[data-command-close]').forEach((item) => item.addEventListener('click', close));
+  menu.querySelectorAll('a').forEach((item) => item.addEventListener('click', close));
+  document.addEventListener('keydown', (event) => {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      menu.hidden ? open() : close();
+    }
+    if (event.key === 'Escape' && !menu.hidden) close();
+    if (event.key === 'Tab' && !menu.hidden) {
+      const focusable = [...menu.querySelectorAll('a, button')];
+      const first = focusable[0];
+      const last = focusable.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
+  });
+}
+
+function initCopyEmail() {
+  const button = document.querySelector('#copy-email');
+  const status = document.querySelector('#copy-status');
+  if (!button || !status) return;
+  button.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(button.dataset.email);
+      button.textContent = 'Copied';
+      status.textContent = 'Email copied to clipboard.';
+      setTimeout(() => { button.textContent = 'Copy email'; status.textContent = ''; }, 2200);
+    } catch {
+      status.textContent = `Copy unavailable. Email: ${button.dataset.email}`;
+    }
+  });
+}
+
+function initNetworkCanvas() {
+  if (reducedMotion) return;
+  const canvas = document.querySelector('#network-canvas');
+  if (!canvas) return;
+  const context = canvas.getContext('2d');
+  const pointer = { x: innerWidth * .5, y: innerHeight * .45, active: false };
+  let width = 0;
+  let height = 0;
+  let dpr = 1;
+  let particles = [];
+  let frame = 0;
+  let running = true;
+
+  const resize = () => {
+    width = innerWidth;
+    height = innerHeight;
+    dpr = Math.min(devicePixelRatio || 1, 1.5);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    context.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = Math.min(54, Math.max(28, Math.floor(width / 28)));
+    particles = Array.from({ length: count }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - .5) * .15,
+      vy: (Math.random() - .5) * .15,
+      r: Math.random() * 1.2 + .45
+    }));
+  };
+
+  const draw = () => {
+    if (!running) return;
+    context.clearRect(0, 0, width, height);
+    context.fillStyle = 'rgba(130,145,255,.55)';
+    for (let index = 0; index < particles.length; index += 1) {
+      const point = particles[index];
+      point.x += point.vx;
+      point.y += point.vy;
+      if (point.x < -20) point.x = width + 20;
+      if (point.x > width + 20) point.x = -20;
+      if (point.y < -20) point.y = height + 20;
+      if (point.y > height + 20) point.y = -20;
+      context.beginPath();
+      context.arc(point.x, point.y, point.r, 0, Math.PI * 2);
+      context.fill();
+
+      for (let compare = index + 1; compare < particles.length; compare += 1) {
+        const other = particles[compare];
+        const dx = point.x - other.x;
+        const dy = point.y - other.y;
+        const distance = Math.hypot(dx, dy);
+        if (distance < 125) {
+          context.strokeStyle = `rgba(91,108,255,${(1 - distance / 125) * .12})`;
+          context.beginPath();
+          context.moveTo(point.x, point.y);
+          context.lineTo(other.x, other.y);
+          context.stroke();
+        }
+      }
+
+      if (pointer.active) {
+        const distance = Math.hypot(point.x - pointer.x, point.y - pointer.y);
+        if (distance < 155) {
+          context.strokeStyle = `rgba(92,225,230,${(1 - distance / 155) * .28})`;
+          context.beginPath();
+          context.moveTo(point.x, point.y);
+          context.lineTo(pointer.x, pointer.y);
+          context.stroke();
+        }
+      }
+    }
+    frame = requestAnimationFrame(draw);
+  };
+
+  addEventListener('pointermove', (event) => { pointer.x = event.clientX; pointer.y = event.clientY; pointer.active = true; }, { passive: true });
+  addEventListener('pointerleave', () => { pointer.active = false; });
+  addEventListener('resize', resize, { passive: true });
+  document.addEventListener('visibilitychange', () => {
+    running = !document.hidden;
+    if (running) draw(); else cancelAnimationFrame(frame);
+  });
+  resize();
+  draw();
+}
+
+initRepositoryAtlas();
+initReveals();
+initProgress();
+initRotatingWord();
+initTime();
+initHeroDepth();
+initCommandMenu();
+initCopyEmail();
+initNetworkCanvas();
+
+const year = document.querySelector('#year');
+if (year) year.textContent = new Date().getFullYear();

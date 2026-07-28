@@ -1,290 +1,302 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Ahmed — Full‑Stack Developer</title>
-    <meta name="description" content="Ahmed • 19 y/o full‑stack developer. Building real apps with Next.js, Supabase, Node, Tailwind, Python." />
-    <meta name="theme-color" content="#0ea5e9" />
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-    <!-- Tailwind via CDN for speed -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'],
-              display: ['Space Grotesk', 'Inter', 'ui-sans-serif']
-            },
-            colors: {
-              brand: {
-                50: '#ecfeff', 100: '#cffafe', 200: '#a5f3fc', 300: '#67e8f9', 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2', 700: '#0e7490', 800: '#155e75', 900: '#164e63'
-              }
-            },
-            boxShadow: {
-              glow: '0 0 0 1px rgba(99,102,241,.5), 0 0 80px -10px rgba(56,189,248,.65)'
-            }
-          }
-        }
-      }
-    </script>
-
-    <link rel="stylesheet" href="styles.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#070910">
+    <meta name="description" content="Ahmed Ashraf is a full-stack developer building AI systems, data products, applied machine learning tools, and polished web applications.">
+    <meta property="og:title" content="Ahmed Ashraf — Full-stack, AI &amp; data systems">
+    <meta property="og:description" content="Products that turn complex inputs into useful decisions.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/siap.png">
+    <title>Ahmed Ashraf — Full-stack, AI &amp; data systems</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:wdth,wght@75..100,400..700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%235b6cff'/%3E%3Cpath d='M18 45 29 17h7l11 28h-8l-2-6H27l-2 6Zm11-13h6l-3-9Z' fill='white'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
   </head>
-  <body class="bg-white text-gray-900 antialiased dark:bg-[#0b0f17] dark:text-gray-100">
-    <!-- Progress bar -->
-    <div id="progress" class="fixed inset-x-0 top-0 h-1.5 bg-gradient-to-r from-fuchsia-500 via-sky-400 to-emerald-400 origin-left scale-x-0 z-50"></div>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+    <canvas id="network-canvas" aria-hidden="true"></canvas>
+    <div class="noise" aria-hidden="true"></div>
 
-    <!-- Background decorations -->
-    <div aria-hidden="true" class="fixed inset-0 -z-10">
-      <div class="absolute -top-40 -left-40 h-[36rem] w-[36rem] rounded-full blur-3xl opacity-25 bg-gradient-to-tr from-fuchsia-500 via-sky-400 to-emerald-400 dark:opacity-30"></div>
-      <div class="absolute -bottom-40 -right-40 h-[32rem] w-[32rem] rounded-full blur-3xl opacity-20 bg-gradient-to-tr from-emerald-500 via-amber-400 to-pink-500 dark:opacity-25"></div>
-      <canvas id="mesh" class="absolute inset-0 w-full h-full opacity-[.18] dark:opacity-[.25]"></canvas>
-      <canvas id="particles" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
-      <div id="cursor-glow" class="pointer-events-none absolute left-0 top-0 h-56 w-56 rounded-full bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.28),rgba(56,189,248,0)_60%)] mix-blend-screen"></div>
-    </div>
-
-    <!-- Navbar -->
-    <header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/50 dark:supports-[backdrop-filter]:bg-black/20">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="flex h-16 items-center justify-between">
-          <a href="#top" class="font-display text-xl font-semibold tracking-tight">
-            <span class="bg-gradient-to-r from-sky-400 via-fuchsia-500 to-emerald-400 bg-clip-text text-transparent">Ahmed</span>
-            <span class="sr-only">Home</span>
-          </a>
-          <nav class="hidden gap-7 text-sm font-medium md:flex">
-            <a href="#about" class="nav-link">About</a>
-            <a href="#projects" class="nav-link">Projects</a>
-            <a href="#stack" class="nav-link">Stack</a>
-            <a href="#stats" class="nav-link">Stats</a>
-            <a href="#contact" class="nav-link">Contact</a>
-          </nav>
-          <div class="flex items-center gap-3">
-            <button id="themeToggle" class="group rounded-full p-2 text-gray-600 transition hover:shadow-glow dark:text-gray-300" aria-label="Toggle theme">
-              <svg class="block h-5 w-5 group-[.dark]:hidden" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z"/><path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.536 6.364-1.414-1.414M7.879 7.879 6.465 6.465m10.607 0-1.414 1.414M7.879 16.121l-1.414 1.414" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-              <svg class="hidden h-5 w-5 group-[.dark]:block" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.64 13a9 9 0 1 1-10.63-10.63 1 1 0 0 1 1.08 1.52A7 7 0 1 0 20.12 12a1 1 0 0 1 1.52 1.08Z"/></svg>
-            </button>
-            <a href="#contact" class="rounded-full bg-gray-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100">Say hi</a>
-          </div>
-        </div>
-      </div>
-      <div class="md:hidden">
-        <nav class="mx-auto max-w-7xl px-4 pb-3 text-sm font-medium">
-          <div class="flex flex-wrap gap-5 py-2 text-gray-600 dark:text-gray-300">
-            <a href="#about" class="nav-link">About</a>
-            <a href="#projects" class="nav-link">Projects</a>
-            <a href="#stack" class="nav-link">Stack</a>
-            <a href="#stats" class="nav-link">Stats</a>
-            <a href="#contact" class="nav-link">Contact</a>
-          </div>
-        </nav>
-      </div>
+    <header class="site-header" id="top">
+      <a class="brand" href="#top" aria-label="Ahmed Ashraf, home">
+        <span class="brand-mark">A</span>
+        <span class="brand-copy">Ahmed Ashraf<small>Product engineer</small></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="#work">Selected work</a>
+        <a href="#atlas">Repo atlas</a>
+        <a href="#about">About</a>
+      </nav>
+      <a class="header-cta" href="mailto:ahmedashrafyas@gmail.com">
+        <span class="availability-dot" aria-hidden="true"></span>
+        Let’s build
+      </a>
     </header>
 
-    <!-- Hero -->
-    <section id="top" class="relative">
-      <div class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 pb-20 pt-16 sm:pt-24 lg:grid-cols-12 lg:gap-16 lg:px-8">
-        <div class="order-2 lg:order-1 lg:col-span-7">
-          <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/60 px-3 py-1 text-xs text-slate-600 backdrop-blur dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
-            <span class="inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-400"></span>
-            Available for any type of work.
-          </div>
-          <h1 class="mt-5 font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
-            <span class="animated-gradient">Hi, I’m Ahmed</span>
-            <span class="block text-slate-800 dark:text-slate-100">Full‑stack web developer</span>
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow reveal">Full-stack development · AI automation · Applied ML</p>
+          <h1 id="hero-title" class="reveal">
+            <span class="hero-line">I build systems</span>
+            <span class="hero-line">that <span class="hero-shift" data-words="think,explain,adapt,ship">think</span></span>
+            <span class="hero-end">and ship.</span>
           </h1>
-          <div class="sig-wrap mt-2">
-            <svg class="signature" viewBox="0 0 300 60" aria-hidden="true">
-              <path d="M5 40 C 40 10, 60 10, 95 40 S 155 70, 185 35 S 235 5, 295 35" fill="none"/>
+          <p class="hero-intro reveal">I’m Ahmed—a computer science student and product engineer turning messy data, demanding workflows, and ambitious ideas into software people can actually use.</p>
+          <div class="hero-actions reveal">
+            <a class="button button-primary magnetic" href="#work">
+              Explore the systems
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </a>
+            <a class="button button-ghost" href="https://github.com/Ahm-edAshraf" target="_blank" rel="noreferrer">
+              GitHub profile
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+            </a>
+          </div>
+          <dl class="hero-facts reveal">
+            <div><dt>Base</dt><dd>Kuala Lumpur ↔ KAEC</dd></div>
+            <div><dt>Focus</dt><dd>Useful intelligence</dd></div>
+            <div><dt>Repos</dt><dd>32 public builds</dd></div>
+          </dl>
+        </div>
+
+        <div class="hero-system reveal" id="hero-system">
+          <div class="system-topline">
+            <span>AHMED_OS / LIVE MAP</span>
+            <span id="local-time">MYT --:--</span>
+          </div>
+          <div class="orbit-stage" role="img" aria-label="Ahmed's skill constellation">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="scan-line"></div>
+            <div class="portrait-shell">
+              <img src="assets/ahmed.png" width="250" height="250" fetchpriority="high" alt="Portrait of Ahmed Ashraf">
+              <span>BUILD NODE / 01</span>
+            </div>
+            <span class="skill-node node-product"><i></i>Product UI</span>
+            <span class="skill-node node-data"><i></i>Data systems</span>
+            <span class="skill-node node-ai"><i></i>AI agents</span>
+            <span class="skill-node node-auto"><i></i>Automation</span>
+            <svg class="constellation-lines" viewBox="0 0 600 600" aria-hidden="true">
+              <path d="M300 300 127 174M300 300 491 154M300 300 507 417M300 300 112 438"/>
+              <circle cx="300" cy="300" r="6"/>
             </svg>
           </div>
-          <p class="mt-5 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
-            19 y/o developer building real‑world apps with <b>Next.js</b>, <b>Supabase</b>, <b>Node</b>, <b>Tailwind</b>, and <b>Python</b>. I love AI automation, smart UIs, and realtime apps.
-          </p>
-          <div class="mt-8 flex flex-wrap gap-3">
-            <a href="#projects" data-magnetic class="group inline-flex items-center gap-2 rounded-full bg-gray-900 px-5 py-3 text-sm font-semibold text-white shadow hover:shadow-lg hover:shadow-sky-400/30 dark:bg-white dark:text-gray-900" data-ripple>
-              <span>View Projects</span>
-              <svg class="h-4 w-4 transition group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-            </a>
-            <a href="#contact" data-magnetic class="inline-flex items-center gap-2 rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-white/20 dark:text-slate-200 dark:hover:bg-white/10" data-ripple>
-              Contact Me
-            </a>
-          </div>
-          <div class="mt-8 flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
-            <span class="inline-flex items-center gap-2"><span class="i-bullet"></span> Based in KAEC, Saudi Arabia / Kuala Lumpur, Malaysia</span>
+          <div class="system-readout">
+            <span><b>01</b> Find the real constraint</span>
+            <span><b>02</b> Build the smallest smart system</span>
+            <span><b>03</b> Prove it with evidence</span>
           </div>
         </div>
+      </section>
 
-        <div class="order-1 lg:order-2 lg:col-span-5">
-          <div class="mx-auto w-full max-w-[28rem]" data-parallax>
-            <div class="relative mx-auto conic-border rounded-full p-[4px]">
-              <div class="avatar-aura"></div>
-              <div class="avatar-inner rounded-full overflow-hidden">
-                <img src="assets/ahmed.png" alt="Ahmed portrait" class="avatar-img" />
+      <div class="signal-strip" aria-hidden="true">
+        <div class="signal-track">
+          <span>NEXT.JS</span><i></i><span>PYTHON</span><i></i><span>CONVEX</span><i></i><span>APPLIED ML</span><i></i><span>SUPABASE</span><i></i><span>AI AGENTS</span><i></i><span>TYPESCRIPT</span><i></i><span>PRODUCT DESIGN</span><i></i>
+          <span>NEXT.JS</span><i></i><span>PYTHON</span><i></i><span>CONVEX</span><i></i><span>APPLIED ML</span><i></i><span>SUPABASE</span><i></i><span>AI AGENTS</span><i></i><span>TYPESCRIPT</span><i></i><span>PRODUCT DESIGN</span><i></i>
+        </div>
+      </div>
+
+      <section class="work-section section-shell" id="work" aria-labelledby="work-title">
+        <header class="section-heading reveal">
+          <div>
+            <p class="eyebrow">Selected systems / 2025—2026</p>
+            <h2 id="work-title">Built to do more<br>than look impressive.</h2>
+          </div>
+          <p>Real products, hackathon builds, and data systems. Every one started with a concrete problem and ended with working software.</p>
+        </header>
+
+        <div class="featured-grid">
+          <article class="project project-siap reveal" data-project="siap">
+            <div class="project-media media-browser">
+              <div class="browser-bar"><i></i><i></i><i></i><span>siap-chutes.vercel.app</span></div>
+              <img src="assets/siap.png" width="1440" height="1000" loading="lazy" alt="Siap application landing page showing evidence-linked eligibility review">
+              <div class="media-glow" aria-hidden="true"></div>
+            </div>
+            <div class="project-info">
+              <div class="project-kicker"><span>Privacy-first AI</span><span>2026</span></div>
+              <h3>Siap</h3>
+              <p>Turns dense application packs into cited eligibility checks and an ordered action plan using four parallel confidential-compute agents—without retaining raw files.</p>
+              <ul class="metric-row" aria-label="Project highlights">
+                <li><strong>4</strong><span>TEE agents</span></li>
+                <li><strong>Local</strong><span>PDF + OCR</span></li>
+                <li><strong>Cited</strong><span>every conclusion</span></li>
+              </ul>
+              <div class="project-links">
+                <a href="https://siap-chutes.vercel.app" target="_blank" rel="noreferrer">Open product <span>↗</span></a>
+                <a href="https://github.com/Ahm-edAshraf/siap-chutes" target="_blank" rel="noreferrer">Source <span>↗</span></a>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
+          </article>
 
-    <!-- Divider -->
-    <div aria-hidden="true" class="divider">
-      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" class="w-full h-[80px]">
-        <defs>
-          <linearGradient id="grad-wave" x1="0" x2="1">
-            <stop offset="0%" stop-color="#38bdf8"/>
-            <stop offset="50%" stop-color="#a78bfa"/>
-            <stop offset="100%" stop-color="#34d399"/>
-          </linearGradient>
-        </defs>
-        <path d="M0,80 C240,120 480,0 720,40 C960,80 1200,120 1440,60 L1440,120 L0,120 Z" fill="url(#grad-wave)" opacity=".25"/>
-      </svg>
-    </div>
-
-    <!-- Ticker -->
-    <section class="ticker" aria-hidden="true">
-      <div class="container">
-        <div class="ticker__track">
-          <span>Next.js • Supabase • Tailwind • Node.js • Python • TypeScript • Realtime • AI Automation •</span>
-          <span>Next.js • Supabase • Tailwind • Node.js • Python • TypeScript • Realtime • AI Automation •</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- About -->
-    <section id="about" class="section">
-      <div class="container">
-        <h2 class="section-title">About Me</h2>
-        <p class="section-lead">
-          I enjoy turning ideas into polished products — fast. My current goals are to build MVPs that feel like startups, with clean UX, realtime features, and AI‑powered tooling where it makes sense.
-        </p>
-        <ul class="mt-6 grid gap-4 text-slate-700 dark:text-slate-300 md:grid-cols-2">
-          <li class="glass flex items-start gap-3 p-4"><span class="i-bullet mt-1"></span><span>Tech I work with daily: <b>Next.js</b>, <b>Supabase</b>, <b>Tailwind</b>, <b>Node.js</b>, <b>Express</b>, <b>Python</b>, <b>TypeScript</b>.</span></li>
-          <li class="glass flex items-start gap-3 p-4"><span class="i-bullet mt-1"></span><span>Interests: AI automation, smart UIs, ML tools, realtime apps.</span></li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Projects -->
-    <section id="projects" class="section">
-      <div class="container">
-        <h2 class="section-title">Featured Projects</h2>
-        <div id="project-filters" class="mt-4 flex flex-wrap gap-2 text-sm"></div>
-        <div id="projects-grid" class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3"></div>
-      </div>
-    </section>
-
-    <!-- Stack -->
-    <section id="stack" class="section">
-      <div class="container">
-        <h2 class="section-title">Tech I Use A Lot</h2>
-        <div class="mt-6 flex justify-center">
-          <img alt="Tech stack icons" class="max-w-full rounded-xl border border-white/10 bg-white/50 p-3 shadow dark:bg-white/5" src="https://skillicons.dev/icons?i=nextjs,tailwind,supabase,nodejs,express,python,ts,js,html,css,git,github" />
-        </div>
-
-        <div class="mt-10 grid gap-4 md:grid-cols-2">
-          <div class="glass p-5">
-            <h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Python & AI Tools</h3>
-            <p class="text-slate-700 dark:text-slate-300">
-              pandas · numpy · matplotlib · seaborn · scikit‑learn · xgboost · lightgbm · optuna<br/>
-              openai · langchain · transformers · whisper · tiktoken · spacy · keybert<br/>
-              flask · fastapi · sqlalchemy · requests
-            </p>
-          </div>
-          <div class="glass p-5">
-            <h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">What I’m into</h3>
-            <p class="text-slate-700 dark:text-slate-300">AI agents, realtime collaboration, delightful micro‑interactions, and shipping fast.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Stats -->
-    <section id="stats" class="section">
-      <div class="container">
-        <div class="flex items-center justify-between gap-4">
-          <h2 class="section-title">GitHub Stats</h2>
-          <button id="refresh-stats" class="chip" title="Force refresh stats">↻ Refresh</button>
-        </div>
-        <div class="mt-8 flex flex-wrap items-center justify-center gap-6">
-          <img data-src="https://github-readme-stats.vercel.app/api?username=Ahm-edAshraf&show_icons=true&theme=radical&cache_seconds=3600" alt="GitHub stats" class="gh-stat h-[180px] rounded-xl border border-white/10 bg-white/60 p-2 shadow dark:bg-white/5" loading="lazy" decoding="async" />
-          <img data-src="https://github-readme-stats.vercel.app/api/top-langs/?username=Ahm-edAshraf&layout=compact&theme=radical&cache_seconds=3600" alt="Top languages" class="gh-stat h-[180px] rounded-xl border border-white/10 bg-white/60 p-2 shadow dark:bg-white/5" loading="lazy" decoding="async" />
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="section pb-24">
-      <div class="container">
-        <h2 class="section-title">Get in Touch</h2>
-        <div class="mt-8 flex justify-center">
-          <div class="glass p-6 w-full max-w-lg">
-            <h3 class="text-xl font-semibold">Let’s build something</h3>
-            <p class="mt-2 text-slate-600 dark:text-slate-300">DM me on Discord or email me. I reply fast.</p>
-            <div class="mt-4 flex flex-col gap-3 text-sm">
-              <button data-copy="luhahmed" class="copy-btn">
-                <span class="font-mono">Discord</span>
-                <span class="grow"></span>
-                <span class="text-slate-500">luhahmed</span>
-              </button>
-              <button data-copy="ahmedashrafyas@gmail.com" class="copy-btn">
-                <span class="font-mono">Email</span>
-                <span class="grow"></span>
-                <span class="text-slate-500">ahmedashrafyas@gmail.com</span>
-              </button>
-              <a href="https://www.linkedin.com/in/ahmed-ashraf-5ab7bb334/" target="_blank" rel="noopener" class="copy-btn">
-                <span class="font-mono">LinkedIn</span>
-                <span class="grow"></span>
-                <span class="text-slate-500">ahmed-ashraf-5ab7bb334</span>
-              </a>
+          <article class="project project-factory reveal" data-project="factorypulse">
+            <div class="project-info">
+              <div class="project-kicker"><span>Predictive maintenance</span><span>V HACK 2026</span></div>
+              <h3>FactoryPulse<br>Lite</h3>
+              <p>Predicts turbofan failure before it stops production. The system estimates remaining useful life, detects degradation, explains sensor drivers, and prioritizes maintenance.</p>
+              <ul class="metric-row" aria-label="Model results">
+                <li><strong>17.67</strong><span>test RMSE</span></li>
+                <li><strong>168</strong><span>engineered features</span></li>
+                <li><strong>100</strong><span>test engines</span></li>
+              </ul>
+              <div class="project-links">
+                <a href="https://github.com/Ahm-edAshraf/FactoryPulse-Lite" target="_blank" rel="noreferrer">Explore the build <span>↗</span></a>
+              </div>
             </div>
+            <div class="project-media factory-console" role="img" aria-label="Reconstructed FactoryPulse interface visual">
+              <div class="console-header"><span>FPL / MACHINE HEALTH</span><span class="console-live"><i></i> SYSTEM LIVE</span></div>
+              <div class="machine-cards">
+                <div><span>UNIT 021</span><b>12</b><small>cycles remaining</small></div>
+                <div><span>HEALTH</span><b class="critical">CRITICAL</b><small>maintenance now</small></div>
+                <div><span>DRIFT</span><b>+34%</b><small>sensor 11</small></div>
+              </div>
+              <svg class="rul-chart" viewBox="0 0 720 300" role="img" aria-label="Remaining useful life trend dropping into the critical zone">
+                <defs><linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b6cff" stop-opacity=".65"/><stop offset="1" stop-color="#5b6cff" stop-opacity="0"/></linearGradient></defs>
+                <g class="grid-lines"><path d="M0 50h720M0 125h720M0 200h720M0 275h720"/><path d="M90 0v300M210 0v300M330 0v300M450 0v300M570 0v300M690 0v300"/></g>
+                <path class="area" d="M0 46C90 58 100 89 180 102s112 1 179 44 71 91 140 95 75-2 118 33 65 20 103 24V300H0Z"/>
+                <path class="trend" d="M0 46C90 58 100 89 180 102s112 1 179 44 71 91 140 95 75-2 118 33 65 20 103 24"/>
+                <path class="threshold" d="M0 246h720"/><circle cx="617" cy="274" r="8"/>
+              </svg>
+              <div class="console-footer"><span>NASA CMAPSS / FD001</span><span>MODEL: XGBOOST</span><span>INFERENCE: READY</span></div>
+            </div>
+          </article>
+
+          <article class="project project-half project-formai reveal">
+            <div class="project-media media-browser">
+              <div class="browser-bar"><i></i><i></i><i></i><span>formai-ten.vercel.app</span></div>
+              <img src="assets/formai-new.png" width="1440" height="1000" loading="lazy" alt="FormAI landing page with AI form generation interface">
+            </div>
+            <div class="project-info">
+              <div class="project-kicker"><span>AI product</span><span>Live</span></div>
+              <h3>FormAI</h3>
+              <p>Plain-English prompts become structured, editable forms with team workspaces, immutable publishing, response analytics, and CSV export.</p>
+              <p class="tech-line">Next.js 16 · React 19 · Convex · Clerk · Groq</p>
+              <div class="project-links"><a href="https://formai-ten.vercel.app/" target="_blank" rel="noreferrer">Try it <span>↗</span></a><a href="https://github.com/Ahm-edAshraf/FormAi" target="_blank" rel="noreferrer">Source <span>↗</span></a></div>
+            </div>
+          </article>
+
+          <article class="project project-half project-gear reveal">
+            <div class="project-media media-browser">
+              <div class="browser-bar"><i></i><i></i><i></i><span>gearguard-campus.vercel.app</span></div>
+              <img src="assets/gearguard.png" width="1440" height="1000" loading="lazy" alt="GearGuard Campus equipment booking interface">
+            </div>
+            <div class="project-info">
+              <div class="project-kicker"><span>Campus operations</span><span>Live</span></div>
+              <h3>GearGuard</h3>
+              <p>A campus equipment lifecycle system that blocks booking conflicts and tracks every item from reservation through pickup, return, and overdue status.</p>
+              <p class="tech-line">Next.js 16 · TypeScript · Framer Motion</p>
+              <div class="project-links"><a href="https://gearguard-campus.vercel.app" target="_blank" rel="noreferrer">Open app <span>↗</span></a><a href="https://github.com/Ahm-edAshraf/gear-guard" target="_blank" rel="noreferrer">Source <span>↗</span></a></div>
+            </div>
+          </article>
+
+          <article class="project project-mini project-reviewer reveal">
+            <div class="project-media"><img src="assets/codereviewer.jpeg" width="839" height="975" loading="lazy" alt="AI Code Reviewer GitHub integration preview"></div>
+            <div class="project-info">
+              <div class="project-kicker"><span>Developer automation</span><span>Python</span></div>
+              <h3>AI Code Reviewer</h3>
+              <p>A GitHub App that receives PR webhooks, chunks diffs, grades findings by severity, and posts structured Gemini reviews.</p>
+              <div class="project-links"><a href="https://github.com/Ahm-edAshraf/ai-code-reviewer" target="_blank" rel="noreferrer">Source <span>↗</span></a></div>
+            </div>
+          </article>
+
+          <article class="project project-mini project-rides reveal">
+            <div class="project-media"><img src="assets/dashboard-preview.jpeg" width="1600" height="629" loading="lazy" alt="NCR ride analytics dashboard with KPIs and charts"></div>
+            <div class="project-info">
+              <div class="project-kicker"><span>Data product</span><span>150K+ records</span></div>
+              <h3>NCR Ride Analytics</h3>
+              <p>A 12-chart analytics workspace plus real-time completion prediction powered by 368 engineered features and a 98.3% AUC LightGBM model.</p>
+              <div class="project-links"><a href="https://github.com/Ahm-edAshraf/streamlit-uber-dataset-prediction" target="_blank" rel="noreferrer">Source <span>↗</span></a></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="atlas-section section-shell" id="atlas" aria-labelledby="atlas-title">
+        <header class="section-heading atlas-heading reveal">
+          <div><p class="eyebrow">The complete build log</p><h2 id="atlas-title">Repository atlas.</h2></div>
+          <p>Twenty-six original public builds across product engineering, data, AI, automation, and early web experiments. Forks and the portfolio itself are excluded.</p>
+        </header>
+        <div class="atlas-controls reveal" role="group" aria-label="Filter repositories">
+          <button type="button" class="filter-button is-active" data-filter="all" aria-pressed="true">All / 26</button>
+          <button type="button" class="filter-button" data-filter="product" aria-pressed="false">Products</button>
+          <button type="button" class="filter-button" data-filter="data" aria-pressed="false">AI + data</button>
+          <button type="button" class="filter-button" data-filter="automation" aria-pressed="false">Automation</button>
+          <button type="button" class="filter-button" data-filter="experiment" aria-pressed="false">Experiments</button>
+        </div>
+        <div class="repo-grid" id="repo-grid" aria-live="polite"></div>
+        <noscript><p class="noscript-note">Enable JavaScript to explore the repository atlas. All projects remain available on <a href="https://github.com/Ahm-edAshraf">Ahmed’s GitHub profile</a>.</p></noscript>
+      </section>
+
+      <section class="about-section section-shell" id="about" aria-labelledby="about-title">
+        <div class="about-visual reveal" aria-hidden="true">
+          <div class="pipeline-map">
+            <span class="pipeline-node p1">Messy input</span>
+            <span class="pipeline-node p2">Model</span>
+            <span class="pipeline-node p3">Evidence</span>
+            <span class="pipeline-node p4">Useful action</span>
+            <svg viewBox="0 0 760 480"><path d="M93 118C224 82 224 218 360 181S524 95 659 119"/><path d="M92 349C232 394 274 287 367 314s167 102 291 36"/><path d="M365 181v133"/></svg>
+            <div class="pipeline-pulse pulse-one"></div><div class="pipeline-pulse pulse-two"></div>
           </div>
         </div>
-      </div>
-    </section>
+        <div class="about-copy reveal">
+          <p class="eyebrow">What connects the work</p>
+          <h2 id="about-title">Complexity in.<br>Clarity out.</h2>
+          <p class="about-lead">The stack changes. The job stays the same: understand the real problem, make the intelligence legible, and get a reliable product into someone’s hands.</p>
+          <div class="capability-list">
+            <div><span>01</span><h3>Product engineering</h3><p>Next.js, React, TypeScript, realtime backends, authentication, and interfaces that hold up beyond the landing page.</p></div>
+            <div><span>02</span><h3>Applied intelligence</h3><p>AI agents, grounded outputs, NLP pipelines, model evaluation, forecasting, and automation with explicit failure paths.</p></div>
+            <div><span>03</span><h3>Data systems</h3><p>Feature engineering, analytics dashboards, explainability, operational metrics, and evidence that supports a decision.</p></div>
+          </div>
+        </div>
+      </section>
 
-    <footer class="border-t border-white/10 py-10 text-center text-sm text-slate-500">
-      <div class="container">
-        <p>© <span id="y"></span> Ahmed. Built with 💙</p>
-      </div>
+      <section class="contact-section" id="contact" aria-labelledby="contact-title">
+        <div class="contact-orb" aria-hidden="true"></div>
+        <p class="eyebrow reveal">Open channel</p>
+        <h2 id="contact-title" class="reveal">Have a hard problem?<br><span>Send it my way.</span></h2>
+        <p class="contact-copy reveal">I’m open to internships, collaborations, ambitious builds, and conversations about AI products that should actually exist.</p>
+        <div class="contact-actions reveal">
+          <a class="button button-light magnetic" href="mailto:ahmedashrafyas@gmail.com">ahmedashrafyas@gmail.com <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+          <button type="button" class="button button-outline-light" id="copy-email" data-email="ahmedashrafyas@gmail.com">Copy email</button>
+        </div>
+        <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+        <div class="social-row reveal">
+          <a href="https://github.com/Ahm-edAshraf" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
+          <a href="https://www.linkedin.com/in/ahmed-ashraf-5ab7bb334/" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
+          <span>Discord / luhahmed</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>Ahmed Ashraf / <span id="year">2026</span></span>
+      <span>Built from scratch. No template.</span>
+      <a href="#top">Back to orbit ↑</a>
     </footer>
 
-    <!-- Now bar -->
-    <div id="nowbar" class="fixed inset-x-0 bottom-4 z-50 flex justify-center px-4">
-      <div class="nowbar-pill">Available now • <span id="nowbar-time"></span></div>
-    </div>
+    <button class="command-trigger" id="command-trigger" type="button" aria-haspopup="dialog" aria-controls="command-menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 8 4 4-4 4m6 0h6"/></svg>
+      <span>Jump anywhere</span>
+      <kbd>⌘ K</kbd>
+    </button>
 
-    <!-- Command Palette -->
-    <div id="cmd" class="hidden fixed inset-0 z-[60] items-start justify-center bg-black/40 p-6 backdrop-blur-sm">
-      <div class="w-full max-w-xl overflow-hidden rounded-xl border border-white/10 bg-white/80 shadow-2xl backdrop-blur dark:bg-[#0b0f17]/80">
-        <div class="flex items-center gap-3 border-b border-white/10 px-4 py-3">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-slate-500"><path d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          <input id="cmd-input" class="w-full bg-transparent outline-none placeholder:text-slate-400" placeholder="Search sections, projects, or type > to run" autofocus />
-          <span class="text-xs text-slate-500">Esc</span>
-        </div>
-        <div id="cmd-results" class="max-h-[50vh] overflow-y-auto p-2"></div>
+    <div class="command-menu" id="command-menu" role="dialog" aria-modal="true" aria-labelledby="command-title" hidden>
+      <div class="command-backdrop" data-command-close></div>
+      <div class="command-panel">
+        <div class="command-head"><span id="command-title">Navigate Ahmed_OS</span><button type="button" data-command-close aria-label="Close command menu">ESC</button></div>
+        <nav aria-label="Command menu">
+          <a href="#work"><span>01</span><b>Selected work</b><small>Six deep dives</small></a>
+          <a href="#atlas"><span>02</span><b>Repository atlas</b><small>Complete build log</small></a>
+          <a href="#about"><span>03</span><b>How I work</b><small>Capabilities + approach</small></a>
+          <a href="mailto:ahmedashrafyas@gmail.com"><span>04</span><b>Start a conversation</b><small>Email Ahmed</small></a>
+        </nav>
       </div>
     </div>
-
-    <!-- Lightbox -->
-    <div id="lightbox" class="hidden fixed inset-0 z-[70] bg-black/80 p-6">
-      <button id="lightbox-close" class="absolute right-6 top-6 rounded-md border border-white/20 bg-white/10 px-3 py-1.5 text-white">Esc</button>
-      <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-white/10 p-3 text-white">‹</button>
-      <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-white/10 p-3 text-white">›</button>
-      <figure class="mx-auto grid h-full max-w-5xl place-items-center">
-        <img id="lightbox-img" class="max-h-[80vh] w-auto rounded-lg shadow-2xl" alt="Project preview" />
-        <figcaption id="lightbox-caption" class="mt-4 text-center text-sm text-slate-200"></figcaption>
-      </figure>
-    </div>
-
-    <script src="script.js"></script>
   </body>
-  </html>
+</html>
